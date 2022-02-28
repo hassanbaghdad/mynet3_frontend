@@ -18,14 +18,38 @@
                     <span>اضافة اشتراك</span>
                 </v-tooltip>
                 <v-spacer/>
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn fab small color="orange"  v-bind="attrs" v-on="on">
-                            <v-icon color="white">mdi-table</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>ضبط الجدول</span>
-                </v-tooltip>
+                <div class="text-center">
+                    <v-menu offset-y :close-on-content-click="false">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn fab small color="orange"  v-bind="attrs" v-on="on">
+                                <v-icon color="white">mdi-table</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-list >
+                            <v-list-item>
+                                <v-checkbox class="ma-0 pa-0" label="اسم الاشتراك" v-model="$store.state.ui_user.cards.col_card_name"/>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-checkbox class="ma-0 pa-0"  label="السعر بالدينار" v-model="$store.state.ui_user.cards.col_card_priceDinar"/>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-checkbox class="ma-0 pa-0"  label="السعر بالدولار" v-model="$store.state.ui_user.cards.col_card_priceDO"/>
+                            </v-list-item>
+
+
+
+                            <v-list-item>
+                                <v-btn block @click="save_ui_cards" :loading="loading" color="primary">
+                                    <v-icon>mdi-check</v-icon>
+                                    <span class="mr-2 f16b">حفظ الشكل</span>
+                                </v-btn>
+                            </v-list-item>
+
+
+                        </v-list>
+
+                    </v-menu>
+                </div>
 
             </v-toolbar>
         </v-card-title>
@@ -36,22 +60,22 @@
                     <thead>
                     <tr>
                         <th class="text-center f16b">ت</th>
-                        <th class="text-center f16b">الاشتراك</th>
-                        <th class="text-center f16b">السعر بالدينار</th>
-                        <th class="text-center f16b">السعر بالدولار</th>
+                        <th v-if="$store.state.ui_user.cards.col_card_name" class="text-center f16b">الاشتراك</th>
+                        <th v-if="$store.state.ui_user.cards.col_card_priceDinar" class="text-center f16b">السعر بالدينار</th>
+                        <th v-if="$store.state.ui_user.cards.col_card_priceDO" class="text-center f16b">السعر بالدولار</th>
                         <th class="text-center f16b">خيارات</th>
 
 
                     </tr>
                     <tr>
                         <th></th>
-                        <th class="text-center f16b">
+                        <th v-if="$store.state.ui_user.cards.col_card_name" class="text-center f16b">
                             <v-text-field outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
-                        <th class="text-center f16b">
+                        <th v-if="$store.state.ui_user.cards.col_card_priceDinar" class="text-center f16b">
                             <v-text-field outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
-                        <th class="text-center f16b">
+                        <th v-if="$store.state.ui_user.cards.col_card_priceDO" class="text-center f16b">
                             <v-text-field outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
 
@@ -63,9 +87,9 @@
                     <tbody>
                     <tr v-for="card in pageOfItems" :key="card.card_id" >
                         <td class="text-center f16">{{cards.indexOf(card)+1}}</td>
-                        <td  class="text-center f16">{{card.card_name}}</td>
-                        <td  class="text-center f16">{{card.card_priceDinar}}</td>
-                        <td  class="text-center f16">{{card.card_priceDO}}</td>
+                        <td v-if="$store.state.ui_user.cards.col_card_name" class="text-center f16">{{card.card_name}}</td>
+                        <td v-if="$store.state.ui_user.cards.col_card_priceDinar" class="text-center f16">{{card.card_priceDinar}}</td>
+                        <td v-if="$store.state.ui_user.cards.col_card_priceDO"  class="text-center f16">{{card.card_priceDO}}</td>
                         <td  class="text-center f16">
                             <v-btn icon @click="set_card_to_edit(card)">
                                 <v-icon color="primary">mdi-pencil</v-icon>
@@ -130,6 +154,7 @@
         data(){
             return{
                 cards:[],
+                loading:false,
                 customLabels,
                 customStyles,
                 pageOfItems: [],
@@ -151,6 +176,25 @@
                 // update page of items
                 this.pageOfItems = pageOfItems;
             },
+            async save_ui_cards()
+            {
+                this.loading = true;
+                await this.$axios.post('api/save-ui-cards',this.$store.state.ui_user.cards).then(res=>{
+
+                    this.$fire({
+                        title: "نجح",
+                        text: res.data.msg,
+                        type: "success",
+                        timer: 2000
+                    });
+
+                    this.$store.commit("GET_UI_CARDS");
+                }).catch(err=>{
+                    console.log(err)
+                }).finally(fin=>{
+                    this.loading = false
+                })
+            }
         },
         computed:{
             get_cards:function () {
@@ -163,7 +207,7 @@
             }
         },
         created(){
-            this.$store.commit("GET_CARDS")
+            this.$store.commit("GET_CARDS");
         }
     }
 </script>

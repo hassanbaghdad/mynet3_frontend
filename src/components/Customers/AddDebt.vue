@@ -135,11 +135,11 @@
                    this.loading = true;
                    if(this.customer.sand_nextdate =='')
                    {
-                       this.customer.sand_nextdate = moment(new Date()).format('YYYY-MM-DD hh:mm:ss');
+                       this.customer.sand_nextdate = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
                    }else{
-                       this.customer.sand_nextdate = moment(this.customer.sand_nextdate).format('YYYY-MM-DD hh:mm:ss');
+                       this.customer.sand_nextdate = moment(this.customer.sand_nextdate).format('YYYY-MM-DD HH:mm:ss');
                    }
-                   this.customer.sand_date = moment(new Date()).format('YYYY-MM-DD hh:mm:ss');
+                   this.customer.sand_date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
                    await  this.$axios.post('api/add-debt',this.customer).then(res=>{
                        this.$fire({
                            title: "نجح",

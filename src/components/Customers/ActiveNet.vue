@@ -118,7 +118,7 @@
                 if(parseInt(this.$store.state.customers.target.brig_month) ==1)
                 {
 
-                    //dateto_db = this.$store.state.customers.sand_dateto_from_db;
+                    this.dateto_db = this.$store.state.customers.sand_dateto_from_db;
 
                     if(this.dateto_db != '' && this.dateto_db != null && this.dateto_db!= undefined)
                     {
@@ -233,6 +233,7 @@
                         card_id:this.card_id,
                         sand_date:moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
                         remaining_money:this.remaining_money,
+                        sand_money:this.sand_money,
                         moneyin:this.moneyin,
                         card_name:this.card_name,
                         sand_costFk:this.sand_costFk,
@@ -293,18 +294,29 @@
 
             },
             get_customer:function (new_form) {
-                var new_customer = this.$store.state.customers.target;
-                console.log(new_customer)
-                this.cost_name = new_customer.cost_name;
-                this.cost_user = new_customer.cost_user;
-                this.sand_costFk = new_customer.cost_id;
-                this.sand_FkBrig = new_customer.cost_bregFk;
+                if(new_form)
+                {
+                    var new_customer = this.$store.state.customers.target;
+                    console.log(new_customer)
+                    this.cost_name = new_customer.cost_name;
+                    this.cost_user = new_customer.cost_user;
+                    this.sand_costFk = new_customer.cost_id;
+                    this.sand_FkBrig = new_customer.cost_bregFk;
+                }else{
+                    this.$refs.form.reset();
+                }
             },
             get_price:function (new_card_id) {
                 if(new_card_id != 9999)
                 {
-                    this.price = this.cards.filter(item=>item.card_id == new_card_id)[0].card_priceDinar;
-                    this.card_name = this.cards.filter(item=>item.card_id == this.card_id)[0].card_name;
+                        if(new_card_id != null)
+                        {
+                            this.price = this.cards.filter(item=>item.card_id == new_card_id)[0].card_priceDinar;
+                            this.card_name = this.cards.filter(item=>item.card_id == this.card_id)[0].card_name;
+                        }
+
+
+                    
                 }
             },
             get_form:function (new_form) {
@@ -315,6 +327,7 @@
                    this.debts = parseFloat(new_customer.remaining_money)
                    if(new_customer.Sand_cardtype != "" && new_customer.Sand_cardtype != null && new_customer.Sand_cardtype != undefined && new_customer.Sand_cardtype != "-")
                    {
+                       console.log(new_customer)
                        this.card_id = this.cards.filter(item=>item.card_name == new_customer.Sand_cardtype)[0].card_id;
                        this.price = this.cards.filter(item=>item.card_name == new_customer.Sand_cardtype)[0].card_priceDinar;
                        this.change_card_type();

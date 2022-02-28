@@ -2,10 +2,12 @@
 
 import Vue from 'vue';
 import axios from "axios";
+import router from '@/router/index'
 
 // Full config:  https://github.com/axios/axios#request-config
-axios.defaults.baseURL = 'http://127.0.0.1:85';
-// axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
+//axios.defaults.baseURL = 'http://127.0.0.1:85';
+axios.defaults.baseURL = 'https://my-net.pro/mynet_backend/public/';
+//axios.defaults.headers.common['Authorization'] = 'Bearer '+localStorage.getItem('token');
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 let config = {
@@ -34,8 +36,9 @@ _axios.interceptors.response.use(
     return response;
   },
   function(error) {
-    // Do something with response error
-    return Promise.reject(error);
+    if (error.response.status === 401) {
+      router.push('login')
+    }
   }
 );
 

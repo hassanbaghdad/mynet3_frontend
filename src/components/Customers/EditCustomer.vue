@@ -1,13 +1,13 @@
 <template>
 
-        <v-dialog max-width="800" class="pa-0 ma-9" v-model="$store.state.customers.forms.add_customer">
+        <v-dialog max-width="800" class="pa-0 ma-9" v-model="$store.state.customers.forms.edit_customer">
             <v-form lazy-validation v-model="valid" ref="form">
                         <v-card :loading="loading" elevation="6"  max-width="800" class="ma-auto">
                             <v-card-title class="cardtitle"  style="direction: rtl;color: white">
-                                <v-icon large color="white">mdi-account-plus</v-icon>
-                                <span class="mr-2 f16">اضافة مشترك</span>
+                                <v-icon large color="white">mdi-account-edit</v-icon>
+                                <span class="mr-2 f16">تغديل مشترك</span>
                                 <v-spacer/>
-                                <v-btn icon @click="$store.state.customers.forms.add_customer=false">
+                                <v-btn icon @click="$store.state.customers.forms.edit_customer=false">
                                     <v-icon large color="white">mdi-close</v-icon>
                                 </v-btn>
                             </v-card-title>
@@ -53,7 +53,7 @@
                             </v-card-text>
                             <v-divider/>
                             <v-card-actions style="direction: rtl">
-                                <v-btn :loading="loading" @click="add_customer"  color="primary" large>
+                                <v-btn :loading="loading" @click="edit_customer"  color="primary" large>
                                     <v-icon>mdi-key</v-icon>
                                     <span class="f16 pa-2">حفظ</span>
                                 </v-btn>
@@ -78,6 +78,7 @@
                 valid:true,
                 req:[v=>!!v || 'لايمكن ترك الحقل فارغاً'],
                 customer:{
+                    cost_id:'',
                     cost_name:'',
                     cost_user:'',
                     cost_pass:'',
@@ -100,11 +101,12 @@
             }
         },
         methods:{
-            async add_customer(){
+
+            async edit_customer(){
                 if(this.$refs.form.validate())
                 {
                     this.loading = true;
-                    await this.$axios.post('api/add-customer',this.customer).then(res=>{
+                    await this.$axios.post('api/edit-customer',this.customer).then(res=>{
                         this.$fire({
                             title: "نجح",
                             text: res.data.msg,
@@ -112,7 +114,7 @@
                             timer: 2000
                         });
                         this.$refs.form.reset();
-                        this.$store.state.customers.forms.add_customer = false;
+                        this.$store.state.customers.forms.edit_customer = false;
                         this.$store.commit("GET_CUSTOMERS")
                     }).catch(err=>{
                         console.log(err)
@@ -121,41 +123,26 @@
                     })
                 }
             }
-        }
+        },
+        computed:{
+            get_form:function () {
+                return this.$store.state.customers.forms.edit_customer
+            }
+        },
+        watch:{
+            get_form:function (new_form) {
+                if(new_form)
+                {
+                    this.customer = this.$store.state.customers.target;
+
+                }
+
+            }
+        },
+
     }
 </script>
 
 <style >
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
 
-    .f16{
-        font-size: 16px !important;
-        font-family: 'Cairo', sans-serif !Important;
-    }
-
-    .v-label{
-        font-size: 20px !important;
-        font-family: 'Cairo', sans-serif !Important;
-
-        line-height: 15px !important;
-    }
-
-    input{
-        font-size: 18px !important;
-        text-align: center !important;
-        font-family: 'Cairo', sans-serif !Important;
-    }
-    .v-select__selection{
-        width: 100%;
-        font-size: 16px !important;
-        text-align: center !important;
-        font-family: 'Cairo', sans-serif !Important;
-    }
-    .v-list-item__title
-    {
-        width: 100%;
-        font-size: 16px !important;
-        text-align: center !important;
-        font-family: 'Cairo', sans-serif !Important;
-    }
 </style>

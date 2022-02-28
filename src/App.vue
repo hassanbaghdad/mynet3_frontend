@@ -84,9 +84,16 @@ export default {
   data: () => ({
     //
   }),
+  created(){
+    this.$store.state.drawer = true;
+  }
 };
 </script>
 <style>
+
+  .v-list-item__title,.v-select__selections{
+    line-height: 30px !important;
+  }
   /* width */
   ::-webkit-scrollbar {
     width: 5px;
@@ -192,11 +199,29 @@ export default {
     }
   }
 
+  .loading__letter {
+    font-size: 88px;
+    font-weight: normal;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-family: "Audiowide";
+    color: #585555;
+  }
 
+
+  .loading__letter {
+    font-size: 88px;
+    font-weight: normal;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    animation-name: bounce;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+  }
 
   @media only screen and (max-width: 600px) {
     .loading__letter {
-      font-size: 20px;
+      font-size: 60px;
       font-weight: normal;
       letter-spacing: 4px;
       text-transform: uppercase;
@@ -206,7 +231,7 @@ export default {
 
 
     .loading__letter {
-      font-size: 88px;
+      font-size: 60px;
       font-weight: normal;
       letter-spacing: 4px;
       text-transform: uppercase;
@@ -217,26 +242,7 @@ export default {
 
   }
 
-  @media only screen and (min-width: 768px) {
-    .loading__letter {
-      font-size: 88px;
-      font-weight: normal;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      font-family: "Audiowide";
-      color: #585555;
-    }
 
-    .loading__letter {
-      font-size: 88px;
-      font-weight: normal;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      animation-name: bounce;
-      animation-duration: 2s;
-      animation-iteration-count: infinite;
-    }
-  }
   .loading__letter:nth-child(2) {
     animation-delay: 0.1s;
   }

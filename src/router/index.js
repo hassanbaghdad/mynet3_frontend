@@ -8,14 +8,21 @@ import Bills from "@/views/Bills";
 import Debts from "@/views/Debts";
 import Credits from "@/views/Credits";
 import Users from "@/views/Users";
+import Reports from "@/views/Reports";
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/reports',
+    name: 'Reports',
+    component: Reports
+  },
+  {
+    path: '/login',
     name: 'Login',
     component: Login
   },
+
   {
     path: '/customers',
     name: 'Customers',

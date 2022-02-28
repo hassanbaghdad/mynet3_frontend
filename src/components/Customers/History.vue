@@ -1,5 +1,5 @@
 <template>
-    <v-dialog max-width="1000" class="pa-0 ma-9" v-model="$store.state.customers.forms.history">
+    <v-dialog max-width="1300" class="pa-0 ma-9" v-model="$store.state.customers.forms.history">
             <v-card :loading="loading" elevation="6"  max-width="100%" class="ma-auto">
                 <v-card-title class="indigo"  style="direction: rtl;color: white">
                     <v-btn icon @click="$store.state.customers.forms.history=false">
@@ -7,6 +7,9 @@
                     </v-btn>
                     <span class="mr-2 f18">سجل الوصولات</span>
 
+                </v-card-title>
+                <v-card-title class="f16b">
+                    {{cost_name}}/{{cost_user}}
                 </v-card-title>
                 <v-divider />
                 <v-card-text>
@@ -21,12 +24,16 @@
                                 <th class="text-center f16b">مبلغ الوصل</th>
                                 <th class="text-center f16b">الواصل</th>
                                 <th class="text-center f16b">نوع الاشتراك</th>
+                                <th class="text-center f16b">تاريخ الانتهاء</th>
                                 <th class="text-center f16b">مسجل الوصل</th>
                                 <th class="text-center f16b">طباعة</th>
 
                             </tr>
                             <tr>
                                 <th></th>
+                                <th class="text-center f16b">
+                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                </th>
                                 <th class="text-center f16b">
                                     <v-text-field prepend-inner-icon="mdi-magnify"/>
                                 </th>
@@ -63,6 +70,7 @@
                                 <td class="text-center f16">{{sand.Sand_money}}</td>
                                 <td class="text-center f16">{{sand.Sand_moneyin}}</td>
                                 <td class="text-center f16">{{sand.Sand_cardtype}}</td>
+                                <td class="text-center f16">{{sand.Sand_dateto | datefilter}}</td>
                                 <td class="text-center f16">{{sand.sand_user}}</td>
                                 <td class="text-center f16">
                                     <v-btn @click="set_sand_to_print_view(sand)" icon>
@@ -123,7 +131,7 @@
             datefilter:function (value) {
                 if(value != null && value != '' && value != undefined && value !='NaN')
                 {
-                    return moment(value).format('YYYY-MM-DD hh:mm a')
+                    return moment(value).format('YYYY-MM-DD hh:mm A')
                 }
             },
             moneyType:function (value) {
@@ -146,6 +154,8 @@
             return{
                 loading:false,
                 cost_id:0,
+                cost_name:'',
+                cost_user:'',
                 pageOfItems: [],
                 customStyles,
                 customLabels,
@@ -188,7 +198,7 @@
         },
         watch:{
             customer3:function (new_customer) {
-                console.log(new_customer)
+
 
 
             },
@@ -197,6 +207,8 @@
                 {
                     var new_customer = this.$store.state.customers.target;
                     this.cost_id = new_customer.cost_id;
+                    this.cost_name = new_customer.cost_name;
+                    this.cost_user = new_customer.cost_user;
                     this.get_sands_customer()
 
                 }

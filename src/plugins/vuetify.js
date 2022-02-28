@@ -8,7 +8,8 @@ export default new Vuetify({
     theme:{
         themes:{
             light:{
-                cardtitle:'#8071a1'
+                cardtitle:'#8071a1',
+                cardtitleblack:'#35383a'
             }
         }
     }

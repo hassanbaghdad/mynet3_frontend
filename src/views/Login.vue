@@ -60,6 +60,8 @@
 
 <script>
 
+    import axios from "axios";
+
     export default {
         name: "Login",
         data(){
@@ -70,7 +72,7 @@
                 valid:true,
                 req:[v=>!!v || 'لايمكن ترك الحقل فارغاً'],
                 user:{
-                    username:'hassan',
+                    username:'updater',
                     password:'123456'
                 }
             }
@@ -80,10 +82,40 @@
             {
                 if(this.$refs.form.validate())
                 {
+                    this.$store.state.ui = [];
                     this.error = false;
                     this.loading = true;
                     this.$axios.post('api/login',this.user).then(res=>{
-                        console.log(res.data)
+
+                        this.$store.state.towers.towers = res.data.towers;
+                        this.$store.state.cards.cards = res.data.cards;
+                        this.$store.state.user = res.data.user;
+
+                        if(res.data.ui_customers.length > 0)
+                        {
+                            this.$store.state.ui_user.customers = res.data.ui_customers[0];
+                        }
+                        if(res.data.ui_towers.length > 0)
+                        {
+                            this.$store.state.ui_user.towers = res.data.ui_towers[0];
+                        }
+                        if(res.data.ui_cards.length > 0)
+                        {
+                            this.$store.state.ui_user.cards = res.data.ui_cards[0];
+                        }
+                        if(res.data.ui_bills.length > 0)
+                        {
+                            this.$store.state.ui_user.bills = res.data.ui_bills[0];
+                        }
+                        if(res.data.ui_users.length > 0)
+                        {
+                            this.$store.state.ui_user.users = res.data.ui_users[0];
+                        }
+
+
+                        localStorage.setItem('token',res.data.user.token);
+                        axios.defaults.headers.common['Authorization'] = 'Bearer '+res.data.user.token;
+                        this.$router.push('customers')
                     }).catch(err=>{
                         console.log(err)
                         this.error = true;
@@ -92,6 +124,9 @@
                     })
                 }
             }
+        },
+        created(){
+            this.$store.state.loading = false;
         }
     }
 </script>

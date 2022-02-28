@@ -16,14 +16,41 @@
                     <span>اضافة برج</span>
                 </v-tooltip>
                 <v-spacer/>
-                <v-tooltip bottom>
-                    <template v-slot:activator="{ on, attrs }">
-                        <v-btn fab small color="orange"  v-bind="attrs" v-on="on">
-                            <v-icon color="white">mdi-table</v-icon>
-                        </v-btn>
-                    </template>
-                    <span>ضبط الجدول</span>
-                </v-tooltip>
+                <div class="text-center">
+                    <v-menu offset-y :close-on-content-click="false">
+                        <template v-slot:activator="{ on, attrs }">
+                            <v-btn fab small color="orange"  v-bind="attrs" v-on="on">
+                                <v-icon color="white">mdi-table</v-icon>
+                            </v-btn>
+                        </template>
+                        <v-list >
+                            <v-list-item>
+                                <v-checkbox class="ma-0 pa-0" label="البرج" v-model="$store.state.ui_user.towers.col_brig_name"/>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-checkbox class="ma-0 pa-0"  label="نوعه" v-model="$store.state.ui_user.towers.col_brig_main"/>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-checkbox class="ma-0 pa-0"  label="الخدمة" v-model="$store.state.ui_user.towers.col_brig_type"/>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-checkbox class="ma-0 pa-0"  label="عدد المشتركين" v-model="$store.state.ui_user.towers.col_count_customers"/>
+                            </v-list-item>
+
+
+
+                            <v-list-item>
+                                <v-btn block @click="save_ui_towers" :loading="loading" color="primary">
+                                    <v-icon>mdi-check</v-icon>
+                                    <span class="mr-2 f16b">حفظ الشكل</span>
+                                </v-btn>
+                            </v-list-item>
+
+
+                        </v-list>
+
+                    </v-menu>
+                </div>
 
             </v-toolbar>
         </v-card-title>
@@ -34,28 +61,28 @@
                     <thead>
                     <tr>
                         <th class="text-center f16b">ت</th>
-                        <th class="text-center f16b">البرج</th>
-                        <th class="text-center f16b">نوعه</th>
-                        <th class="text-center f16b">الخدمة</th>
-                        <th class="text-center f16b">عدد المشتركين</th>
+                        <th v-if="$store.state.ui_user.towers.col_brig_name" class="text-center f16b">البرج</th>
+                        <th v-if="$store.state.ui_user.towers.col_brig_name" class="text-center f16b">نوعه</th>
+                        <th v-if="$store.state.ui_user.towers.col_brig_type" class="text-center f16b">الخدمة</th>
+                        <th v-if="$store.state.ui_user.towers.col_count_customers" class="text-center f16b">عدد المشتركين</th>
                         <th class="text-center f16b">خيارات</th>
 
 
                     </tr>
                     <tr>
                         <th></th>
-                        <th class="text-center f16b">
+                        <th v-if="$store.state.ui_user.towers.col_brig_name" class="text-center f16b">
                             <v-text-field outlined dense v-model="search.brig_name" @keyup="search_tower" prepend-inner-icon="mdi-magnify"/>
                         </th>
-                        <th class="text-center f16b">
+                        <th v-if="$store.state.ui_user.towers.col_brig_main" class="text-center f16b">
                             <v-select outlined dense v-model="search.brig_main" @keyup="search_tower" @change="search_tower" clearable :items="scope_type" item-text="label" item-value="value" prepend-inner-icon="mdi-magnify"/>
                         </th>
-                        <th class="text-center f16b">
+                        <th  v-if="$store.state.ui_user.towers.col_brig_type" class="text-center f16b">
                             <v-select outlined dense v-model="search.brig_type" @keyup="search_tower"  @change="search_tower" :items="servies_type" clearable item-text="label" item-value="value" prepend-inner-icon="mdi-magnify"/>
                         </th>
 
-                        <th class="text-center f16b">
-                            <v-text-field outlined dense prepend-inner-icon="mdi-magnify"/>
+                        <th  v-if="$store.state.ui_user.towers.col_count_customers" class="text-center f16b">
+                            <v-text-field v-model="search.count_customers" @keyup="search_tower" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
 
                         <th></th>
@@ -66,10 +93,10 @@
                     <tbody>
                     <tr v-for="tower in pageOfItems" :key="tower.brig_id" >
                         <td class="text-center f16">{{towers.indexOf(tower)+1}}</td>
-                        <td  class="text-center f16">{{tower.brig_name}}</td>
-                        <td  class="text-center f16">{{tower.brig_main | brig_main_filter}}</td>
-                        <td  class="text-center f16">{{tower.brig_type | brig_type_filter}}</td>
-                        <td  class="text-center f16">{{tower.count_customers}}</td>
+                        <td  v-if="$store.state.ui_user.towers.col_brig_name" class="text-center f16">{{tower.brig_name}}</td>
+                        <td  v-if="$store.state.ui_user.towers.col_brig_main" class="text-center f16">{{tower.brig_main | brig_main_filter}}</td>
+                        <td  v-if="$store.state.ui_user.towers.col_brig_type" class="text-center f16">{{tower.brig_type | brig_type_filter}}</td>
+                        <td  v-if="$store.state.ui_user.towers.col_count_customers" class="text-center f16">{{tower.count_customers}}</td>
                         <td  class="text-center f16">
                             <v-btn icon @click="set_tower_to_edit(tower)">
                                 <v-icon color="primary">mdi-pencil</v-icon>
@@ -168,6 +195,7 @@
         data(){
             return{
                 towers:this.$store.state.towers.towers,
+                loading:false,
                 pageOfItems: [],
                 customStyles,
                 customLabels,
@@ -191,6 +219,7 @@
                     brig_name:'',
                     brig_main:'',
                     brig_type:'',
+                    count_customers:'',
                 }
             }
         },
@@ -223,8 +252,31 @@
                 {
                     filtered = filtered.filter(item=>item.brig_type == this.search.brig_type);
                 }
+                if(this.search.count_customers != null && this.search.count_customers !="")
+                {
+                    filtered = filtered.filter(item=>item.count_customers == this.search.count_customers);
+                }
 
                 this.towers = filtered;
+            },
+            async save_ui_towers()
+            {
+                this.loading = true;
+                await this.$axios.post('api/save-ui-towers',this.$store.state.ui_user.towers).then(res=>{
+
+                    this.$fire({
+                        title: "نجح",
+                        text: res.data.msg,
+                        type: "success",
+                        timer: 2000
+                    });
+
+                    this.$store.commit("GET_UI_TOWERS");
+                }).catch(err=>{
+                    console.log(err)
+                }).finally(fin=>{
+                    this.loading = false
+                })
             }
         },
         computed:{
@@ -238,21 +290,11 @@
             }
         },
         created(){
-            this.$store.commit("GET_TOWERS")
+            this.$store.commit("GET_TOWERS");
         }
     }
 </script>
 
 <style scoped>
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@600&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@700&display=swap');
-    .f16b{
-        font-size: 16px !important;
-        font-weight: bold !important;
-        font-family: 'Cairo', sans-serif !Important;
-    }
-    .f16{
-        font-size: 16px !important;
-        font-family: 'Cairo', sans-serif !Important;
-    }
+
 </style>

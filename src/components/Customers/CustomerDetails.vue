@@ -54,7 +54,7 @@
                                             <v-text-field readonly v-model="Sand_dateto" outlined label="تاريخ الانتهاء" prepend-inner-icon="mdi-update"/>
                                         </v-col>
                                         <v-col cols="12" md="6">
-                                            <v-text-field-money :properties="{outlined:true,readonly:true}" :options="{precision:0}" v-model="debts"  label="الديون السابقة" prepend-inner-icon="mdi-cash"/>
+                                            <v-text-field-money :properties="{outlined:true,readonly:true}" :options="{precision:0}" v-model="debts"  label="الديون" prepend-inner-icon="mdi-cash"/>
                                         </v-col>
 
 
@@ -69,17 +69,17 @@
 
                     <v-divider/>
                     <v-card-actions style="direction: rtl">
-                        <v-btn  color="primary" large @click="$store.state.customers.forms.details=false">
+                        <v-btn  color="primary"  :large="!$vuetify.breakpoint.xs" @click="$store.state.customers.forms.details=false">
                             <v-icon>mdi-close</v-icon>
-                            <span class="f16 pa-2">غلق</span>
+                            <span class="f16 pa-1">غلق</span>
                         </v-btn>
-                        <v-btn dark color="orange" large @click="$store.state.customers.forms.details=false">
+                        <v-btn dark color="orange" :large="!$vuetify.breakpoint.xs" @click="$store.state.customers.forms.edit_customer=true">
                             <v-icon>mdi-pencil</v-icon>
-                            <span class="f16 pa-2">تعديل</span>
+                            <span class="f16 pa-1">تعديل</span>
                         </v-btn>
-                        <v-btn dark  color="error" large >
+                        <v-btn dark @click="$store.state.customers.forms.delete=true" color="error" :large="!$vuetify.breakpoint.xs" >
                             <v-icon>mdi-delete</v-icon>
-                            <span class="f16 pa-2">حذف</span>
+                            <span class="f16 pa-1">حذف</span>
                         </v-btn>
 
                     </v-card-actions>
@@ -90,6 +90,8 @@
             <PayOff/>
             <AddDebt/>
             <History/>
+        <EditCustomer/>
+        <DeleteCustomer/>
         </v-dialog>
 
 </template>
@@ -99,6 +101,8 @@
     import PayOff from "@/components/Customers/PayOff";
     import AddDebt from "@/components/Customers/AddDebt";
     import History from "@/components/Customers/History";
+    import EditCustomer from "@/components/Customers/EditCustomer";
+    import DeleteCustomer from "@/components/Customers/DeleteCustomer";
     import moment from 'moment'
 
     export default {
@@ -107,7 +111,9 @@
             ActiveNet,
             PayOff,
             AddDebt,
-            History
+            History,
+            EditCustomer,
+            DeleteCustomer
         },
         data(){
             return{
@@ -161,6 +167,11 @@
 
                 })
             },
+            set_customer_to_edit(cost)
+            {
+                this.$store.state.customers.target = cost;
+                this.$store.state.customers.forms.edit_customer = true;
+            }
         },
         computed:{
             get_customer_details2() {

@@ -125,14 +125,15 @@
             },
             async pay_off()
             {
+
                 if(this.$refs.form.validate())
                 {
                     this.loading = true;
                     if(this.customer.sand_date =='')
                     {
-                        this.customer.sand_date = moment(new Date()).format('YYYY-MM-DD hh:mm:ss');
+                        this.customer.sand_date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
                     }else{
-                        this.customer.sand_date = moment(this.customer.sand_date).format('YYYY-MM-DD hh:mm:ss');
+                        this.customer.sand_date = moment(this.customer.sand_date).format('YYYY-MM-DD HH:mm:ss');
                     }
 
                     await  this.$axios.post('api/pay-off',this.customer).then(res=>{

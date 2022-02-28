@@ -27,7 +27,7 @@
                     dense
                     nav
             >
-                <v-list-item link>
+                <v-list-item link to="reports">
                     <v-list-item-icon>
                         <v-icon color="orange" large>mdi-chart-bar</v-icon>
                     </v-list-item-icon>
@@ -75,6 +75,7 @@
                         <v-list-item-title class="f20 text-right">الديون</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+
                 <v-list-item link to="/credits">
                     <v-list-item-icon>
                         <v-icon color="yellow" large>mdi-currency-usd</v-icon>
@@ -92,7 +93,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item link>
+                <v-list-item link @click="$store.commit('BACKUP_DATABASE')">
                     <v-list-item-icon>
                         <v-icon color="#d3d1d3" large>mdi-database-arrow-down</v-icon>
                     </v-list-item-icon>
