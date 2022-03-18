@@ -15,18 +15,6 @@
                    </template>
                    <span>اضافة مشترك</span>
                </v-tooltip>
-               <v-toolbar-items>
-                   <div class="ma-4">
-                       <v-tooltip bottom>
-                           <template v-slot:activator="{ on, attrs }">
-                               <v-switch  label="عرض سريع" class="mr-2" color="red"  v-bind="attrs" v-on="on" v-model="$store.state.customers.speed" @click="$store.commit('GET_CUSTOMERS')"></v-switch>
-                           </template>
-                           <span>جدول سريع</span>
-                       </v-tooltip>
-                   </div>
-               </v-toolbar-items>
-
-
                <v-spacer/>
 
                <div class="text-center">
@@ -38,6 +26,9 @@
                        </template>
                        <v-list >
                            <v-list-item>
+                               <v-checkbox class="ma-0 pa-0" label="ID" v-model="$store.state.ui_user.customers.col_cost_id"/>
+                           </v-list-item>
+                           <v-list-item>
                                <v-checkbox class="ma-0 pa-0" label="اسم المشترك" v-model="$store.state.ui_user.customers.col_cost_name"/>
                            </v-list-item>
                            <v-list-item>
@@ -47,12 +38,6 @@
                                <v-checkbox class="ma-0 pa-0"  label="باسوورد المشترك" v-model="$store.state.ui_user.customers.col_cost_pass"/>
                            </v-list-item>
 
-                           <v-list-item>
-                               <v-checkbox class="ma-0 pa-0"  label="حالة الاشتراك" v-model="$store.state.ui_user.customers.col_remaining_days2"/>
-                           </v-list-item>
-                           <v-list-item>
-                               <v-checkbox class="ma-0 pa-0"  label="الايام المتبقية" v-model="$store.state.ui_user.customers.col_remaining_days"/>
-                           </v-list-item>
                            <v-list-item>
                                <v-checkbox class="ma-0 pa-0"  label="العنوان" v-model="$store.state.ui_user.customers.col_cost_address"/>
                            </v-list-item>
@@ -73,9 +58,6 @@
                            </v-list-item>
                            <v-list-item>
                                <v-checkbox class="ma-0 pa-0"  label="IP" v-model="$store.state.ui_user.customers.col_cost_ipNano"/>
-                           </v-list-item>
-                           <v-list-item>
-                               <v-checkbox class="ma-0 pa-0"  label="المشرف" v-model="$store.state.ui_user.customers.col_cost_admin"/>
                            </v-list-item>
                            <v-list-item>
                                <v-btn block @click="save_ui_customers" :loading="loading" color="primary">
@@ -108,23 +90,23 @@
                    <thead>
                    <tr>
                        <th class="text-center f16b">ت</th>
+                       <th  v-if="$store.state.ui_user.customers.col_cost_id" class="text-center f16b">ID</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_name">اسم المشترك</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_user">اسم الاشتراك</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_pass">باسورد الاشتراك</th>
-                       <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_remaining_days2 && !$store.state.customers.speed">حالة الاشتراك</th>
-                       <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_remaining_days && !$store.state.customers.speed">الايام المتبقية</th>
-                       <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_address">العنوان</th>
+                      <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_address">العنوان</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_phone">هاتف</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_brig">البرج</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_secter">السكتر</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_userNano">يوزر النانو</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_passNano">باسورد النانو</th>
                        <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_ipNano">IP</th>
-                       <th class="text-center f16b" v-if="$store.state.ui_user.customers.col_cost_admin">المشرف</th>
+
 
                    </tr>
                    <tr>
                        <th></th>
+                       <th  v-if="$store.state.ui_user.customers.col_cost_id"></th>
                        <th v-if="$store.state.ui_user.customers.col_cost_name" class="text-center f16b">
                               <v-text-field @keyup="search_customer" v-model="search.cost_name"  @focus="ui_change_width_th($event,true)" @focusout="ui_change_width_th($event,false)"  outlined dense prepend-inner-icon="mdi-magnify"/>
                        </th>
@@ -133,13 +115,6 @@
                        </th>
                        <th  v-if="$store.state.ui_user.customers.col_cost_pass" class="text-center f16b">
                            <v-text-field @keyup="search_customer" v-model="search.cost_pass" @focus="ui_change_width_th($event,true)" @focusout="ui_change_width_th($event,false)" outlined dense prepend-inner-icon="mdi-magnify"/>
-                       </th>
-                       <th  v-if="$store.state.ui_user.customers.col_remaining_days2&& !$store.state.customers.speed" class="text-center f16b">
-                           <v-select height="40" @change="search_customer" @keyup="search_customer" v-model="search.remaining_days2"  style="line-height: 60px" :items="active_state" item-value="value" item-text="label"  @focus="ui_change_width_th($event,true)" @focusout="ui_change_width_th($event,false)" outlined dense prepend-inner-icon="mdi-magnify"/>
-                       </th>
-
-                       <th  v-if="$store.state.ui_user.customers.col_remaining_days&& !$store.state.customers.speed" class="text-center f16b">
-                           <v-text-field @keyup="search_customer" v-model="search.remaining_days" @focus="ui_change_width_th($event,true)" @focusout="ui_change_width_th($event,false)" outlined dense prepend-inner-icon="mdi-magnify"/>
                        </th>
                        <th v-if="$store.state.ui_user.customers.col_cost_address"  class="text-center f16b">
                            <v-text-field @keyup="search_customer" v-model="search.cost_address" @focus="ui_change_width_th($event,true)" @focusout="ui_change_width_th($event,false)" outlined dense prepend-inner-icon="mdi-magnify"/>
@@ -162,9 +137,7 @@
                        <th  v-if="$store.state.ui_user.customers.col_cost_ipNano" class="text-center f16b">
                            <v-text-field @keyup="search_customer" v-model="search.cost_ipNano" @focus="ui_change_width_th($event,true)" @focusout="ui_change_width_th($event,false)" outlined dense prepend-inner-icon="mdi-magnify"/>
                        </th>
-                       <th  v-if="$store.state.ui_user.customers.col_cost_admin" class="text-center f16b">
-                           <v-text-field  @focus="ui_change_width_th($event,true)" @focusout="ui_change_width_th($event,false)" outlined dense prepend-inner-icon="mdi-magnify"/>
-                       </th>
+
 
                    </tr>
 
@@ -172,6 +145,7 @@
                    <tbody>
                    <tr v-for="item in pageOfItems" :key="item.cost_id" style="cursor: pointer" @click="set_customer_to_details(item)">
                        <td class="text-center f16">{{customers.indexOf(item)+1}}</td>
+                       <td  v-if="$store.state.ui_user.customers.col_cost_id" class="text-center f16">{{item.cost_id}}</td>
                        <td  v-if="$store.state.ui_user.customers.col_cost_name" class="text-center f16">{{item.cost_name}}</td>
                        <td  v-if="$store.state.ui_user.customers.col_cost_user" class="text-center f16 font-italic"><b>
                            {{item.cost_user}}
@@ -179,24 +153,7 @@
                        <td  v-if="$store.state.ui_user.customers.col_cost_pass" class="text-center f16">
                            {{item.cost_pass}}
                        </td>
-                       <td  v-if="$store.state.ui_user.customers.col_remaining_days2&& !$store.state.customers.speed" class="text-center f16">
-                           <v-chip v-if="parseInt(item.remaining_days) > 0" small color="success">
-                               <v-icon small>mdi-wifi</v-icon>
-                               <span class="mr-2">فعال</span>
-                           </v-chip>
-                           <v-chip v-if="parseInt(item.remaining_days) < 1" small color="error">
-                               <v-icon small>mdi-wifi-off</v-icon>
-                               <span class="mr-2">منتهي</span>
-                           </v-chip>
-                           <v-chip v-if="item.remaining_days == null" small outlined>
-                               <v-icon small>mdi-close</v-icon>
-                               <span class="mr-2">غير مشترك</span>
-                           </v-chip>
 
-                       </td>
-                       <td  v-if="$store.state.ui_user.customers.col_remaining_days&& !$store.state.customers.speed" class="text-center f16">
-                           {{parseInt(item.remaining_days) | remaining_days_zero}}
-                       </td>
                        <td  v-if="$store.state.ui_user.customers.col_cost_address" class="text-center f16">
                            {{item.cost_address}}
                        </td>
@@ -218,7 +175,6 @@
                        <td  v-if="$store.state.ui_user.customers.col_cost_ipNano" class="text-center f16">
                            {{item.cost_ipNano}}
                        </td>
-                       <td  v-if="$store.state.ui_user.customers.col_cost_admin" class="text-center f16">admin</td>
                    </tr>
 
 
@@ -231,6 +187,7 @@
        <v-card elevation="1" class="f14 text-center pa-4">
            <jw-pagination :pageSize="15" :maxPages="$vuetify.breakpoint.xs?1:10"  :items="customers" :labels="customLabels" :styles="customStyles" @changePage="onChangePage"></jw-pagination>
        </v-card>
+
        <AddCustomer/>
        <CustomerDetails/>
 
@@ -258,7 +215,7 @@
             borderRadius:'5px'
         },
         a: {
-            color: 'black'
+            color:'black'
         }
     };
     export default {
@@ -385,32 +342,7 @@
                 filterd = filterd.filter(item=>item.cost_ipNano.match(this.search.cost_ipNano));
                 filterd = filterd.filter(item=>item.brig_name.match(this.search.brig_name));
                 filterd = filterd.filter(item=>item.cost_secter.match(this.search.cost_secter));
-                if(this.search.remaining_days != null && this.search.remaining_days != '' && this.search.remaining_days != 'a')
-                {
-                    if(this.search.remaining_days == 0 || this.search.remaining_days == '0')
-                    {
-                        filterd = filterd.filter(item=>item.remaining_days<=this.search.remaining_days);
-                    }else{
-                        filterd = filterd.filter(item=>item.remaining_days ==this.search.remaining_days);
-                    }
-                }
-                if(this.search.remaining_days2 != 'a')
-                {
 
-
-                    if(this.search.remaining_days2 > 0)
-                    {
-                        filterd = filterd.filter(item=>item.remaining_days > 0);
-                    }
-                    if(this.search.remaining_days2 < 1)
-                    {
-                        filterd = filterd.filter(item=>item.remaining_days < 1 && item.remaining_days != null);
-                    }
-                    if(this.search.remaining_days2 == 'n')
-                    {
-                        filterd = filterd.filter(item=>item.remaining_days==null);
-                    }
-                }
 
 
 
@@ -444,6 +376,10 @@
             get_customers:function () {
                 return this.$store.state.customers.customers
             },
+            get_theme:function () {
+                return this.$vuetify.theme.dark;
+            },
+
 
 
         },
@@ -452,8 +388,15 @@
                 this.customers = new_customers;
 
             },
+            get_theme:function (new_theme) {
+                if(new_theme)
+                {
+                    this.customStyles.a.color = 'white';
+                }
+            },
 
-        }
+        },
+
     }
 </script>
 

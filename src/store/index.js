@@ -12,6 +12,7 @@ export default new Vuex.Store({
   })],
   state: {
     drawer:true,
+    drawer_show:false,
     loading:false,
     loading2:false,
     user:{
@@ -26,20 +27,20 @@ export default new Vuex.Store({
     ///////////// UI USERS ///////////////
     ui_user:{
       customers:{
-        col_cost_address:false ,
-        col_cost_admin: false,
-        col_cost_brig: false,
-        col_cost_id: false,
-        col_cost_ipNano: false,
-        col_cost_name: false,
-        col_cost_pass: false,
-        col_cost_passNano: false,
-        col_cost_phone: false,
-        col_cost_secter: false,
-        col_cost_user: false,
-        col_cost_userNano: false,
-        col_remaining_days: false,
-        col_remaining_days2: false,
+        col_cost_address:true ,
+        col_cost_admin: true,
+        col_cost_brig: true,
+        col_cost_id: true,
+        col_cost_ipNano: true,
+        col_cost_name: true,
+        col_cost_pass: true,
+        col_cost_passNano: true,
+        col_cost_phone: true,
+        col_cost_secter: true,
+        col_cost_user: true,
+        col_cost_userNano: true,
+        col_remaining_days: true,
+        col_remaining_days2: true,
         created_at: "2022-02-19T00:24:33.000000Z",
         id: 9,
         route: "customers",
@@ -47,72 +48,73 @@ export default new Vuex.Store({
         user_id: 8,
       },
       towers:{
-        col_brig_main: false,
-        col_brig_name: false,
-        col_brig_type: false,
-        col_count_customers: false,
-        id: false,
+        col_brig_main: true,
+        col_brig_name: true,
+        col_brig_type: true,
+        col_count_customers: true,
+        id: true,
         route: "towers",
         user_id: 8,
       },
       cards:{
-        col_card_name:false,
-        col_card_priceDinar:false,
-        col_card_priceDO:false
+        col_card_name:true,
+        col_card_priceDinar:true,
+        col_card_priceDO:true
       },
       bills:{
-        col_Sand_id:false,
-        col_Sand_date:false,
-        col_Sand_moneyType:false,
-        col_Sand_money:false,
-        col_Sand_moneyin:false,
-        col_Sand_cardtype:false,
-        col_cost_name:false,
-        col_cost_user:false,
-        col_sand_user:false,
-        route:false
+        col_Sand_id:true,
+        col_Sand_date:true,
+        col_Sand_moneyType:true,
+        col_Sand_money:true,
+        col_Sand_moneyin:true,
+        col_Sand_cardtype:true,
+        col_cost_name:true,
+        col_cost_user:true,
+        col_sand_user:true,
+        route:true
       },
       debts_to_us:{
-        col_cost_id:false,
-        col_cost_name:false,
-        col_cost_user:false,
-        col_cost_phone:false,
-        col_brig_name:false,
-        col_Sand_carry:false,
-        col_Sand_dateto:false,
-        col_Sand_nextdate:false,
+        col_cost_id:true,
+        col_cost_name:true,
+        col_cost_user:true,
+        col_cost_phone:true,
+        col_brig_name:true,
+        col_Sand_carry:true,
+        col_Sand_dateto:true,
+        col_Sand_nextdate:true,
       },
       debts_to_them:{
-        col_cost_id:false,
-        col_cost_name:false,
-        col_cost_user:false,
-        col_cost_phone:false,
-        col_brig_name:false,
-        col_Sand_carry:false,
-        col_Sand_dateto:false,
-        col_Sand_nextdate:false,
+        col_cost_id:true,
+        col_cost_name:true,
+        col_cost_user:true,
+        col_cost_phone:true,
+        col_brig_name:true,
+        col_Sand_carry:true,
+        col_Sand_dateto:true,
+        col_Sand_nextdate:true,
       },
 
       users:{
-        col_Fullname:'',
-        col_username:'',
-        col_user_level:''
+        col_Fullname:true,
+        col_username:true,
+        col_user_level:true,
+        col_user_type:true
       },
       credits:{
-        col_Sand_id:false,
-        col_Sand_date:false,
-        col_Sand_money:false,
-        col_Sand_moneyin:false,
-        col_Sand_notes:false,
-        col_sand_user:false,
-        col_sand_desc:false,
-        col_Sand_operation:false,
-        col_cost_price:false,
-        col_gain:false,
-        col_currency:false,
-        col_userAflet:false,
-        col_brig_name:false,
-        col_tree_name:false
+        col_Sand_id:true,
+        col_Sand_date:true,
+        col_Sand_money:true,
+        col_Sand_moneyin:true,
+        col_Sand_notes:true,
+        col_sand_user:true,
+        col_sand_desc:true,
+        col_Sand_operation:true,
+        col_cost_price:true,
+        col_gain:true,
+        col_currency:true,
+        col_userAflet:true,
+        col_brig_name:true,
+        col_tree_name:true
       }
     },
     ///////////// END UI USERS ///////////////
@@ -173,35 +175,31 @@ export default new Vuex.Store({
       forms:{
         add_user:false,
         edit_user:false,
-        delete_user:false
+        delete_user:false,
+        set_customers:false
       }
     },
+    backups:{
+      backups:[]
+    },
+    settings:{
+      site_name:'',
+      current_dollar:0,
+      dark:false
+    }
   },
   mutations: {
 
     async GET_CUSTOMERS(state)
     {
-      state.loading2 = true;
+     // state.loading = true;
       state.customers.forms.details = false;
       state.customers.forms.active = false;
       state.customers.forms.add_customer = false;
       state.customers.forms.edit_customer = false;
       state.customers.forms.debt = false;
       state.customers.forms.payoff = false;
-      if(state.customers.speed)
-      {
-        axios.get('api/get-customers-speed').then(res=>{
 
-          state.customers.customers = res.data;
-        }).catch(err=>{
-          if(err.response.status == 401)
-        {
-           router.push("/login")
-        }
-        }).finally(fin=>{
-          state.loading2 = false;
-        })
-      }else{
         axios.get('api/get-customers').then(res=>{
 
           state.customers.customers = res.data;
@@ -211,14 +209,14 @@ export default new Vuex.Store({
            router.push("/login")
         }
         }).finally(fin=>{
-          state.loading2 = false;
+          state.loading = false;
         })
-      }
+
 
     },
     async GET_TOWERS(state)
     {
-      state.loading = true;
+      //state.loading = true;
       axios.get('api/get-towers').then(res=>{
         state.towers.towers = res.data;
       }).catch(err=>{
@@ -232,7 +230,7 @@ export default new Vuex.Store({
     },
     async GET_CARDS(state)
     {
-      state.loading = true;
+      //state.loading = true;
       axios.get('api/get-cards').then(res=>{
         state.cards.cards = res.data;
       }).catch(err=>{
@@ -246,7 +244,7 @@ export default new Vuex.Store({
     },
     async GET_BILLS(state)
     {
-      state.loading = true;
+      //state.loading = true;
       axios.get('api/get-bills').then(res=>{
         state.bills.bills = res.data;
       }).catch(err=>{
@@ -260,7 +258,7 @@ export default new Vuex.Store({
     },
     async GET_USERS(state)
     {
-      state.loading = true;
+      //state.loading = true;
       state.users.forms.add_user = false;
       state.users.forms.edit_user = false;
       state.users.forms.delete_user = false;
@@ -270,16 +268,33 @@ export default new Vuex.Store({
       }).catch(err=>{
         if(err.response.status == 401)
         {
-           router.push("/login")
+          router.push("/login")
         }
 
       }).finally(fin=>{
         state.loading = false;
       })
     },
+    async GET_BACKUPS(state)
+    {
+     // state.loading = true;
+
+      axios.get('api/auth/get-backups').then(res=>{
+        state.backups.backups = res.data;
+      }).catch(err=>{
+        if(err.response.status == 401)
+        {
+          router.push("/login")
+        }
+
+      }).finally(fin=>{
+        state.loading = false;
+      })
+    },
+
     async GET_DEBTS_TO_US(state)
     {
-      state.loading = true;
+     // state.loading = true;
       axios.get('api/get-debts-to-us').then(res=>{
         state.debts.debts_to_us = res.data;
       }).catch(err=>{
@@ -293,7 +308,7 @@ export default new Vuex.Store({
     },
     async GET_DEBTS_TO_THEM(state)
     {
-      state.loading = true;
+     // state.loading = true;
       axios.get('api/get-debts-to-them').then(res=>{
         state.debts.debts_to_them = res.data;
       }).catch(err=>{
@@ -309,7 +324,7 @@ export default new Vuex.Store({
     {
       if(type=="دينار")
       {
-        state.loading = true;
+        //state.loading = true;
 
         axios.get('api/get-credits-di').then(res=>{
           state.credits.credits = res.data;
@@ -324,7 +339,7 @@ export default new Vuex.Store({
       }
       if(type=="دولار")
       {
-        state.loading = true;
+       // state.loading = true;
 
         axios.get('api/get-credits-do').then(res=>{
           state.credits.credits = res.data;
@@ -458,7 +473,7 @@ export default new Vuex.Store({
         console.log(res)
 
         let blob = new Blob([res.data], { type: 'application/sql' } ),
-            url = window.URL.createObjectURL(blob)
+            url = window.URL.createObjectURL(blob);
 
         window.open(url);
       }).catch(err=>{
@@ -470,6 +485,19 @@ export default new Vuex.Store({
         state.loading = false;
       })
     },
+    async LOGOUT(state)
+    {
+      state.loading = true;
+      axios.get('api/auth/logout').then(res=>{
+        console.log(res)
+        router.push('login')
+      }).catch(err=>{
+        console.log(err)
+      }).finally(fin=>{
+        state.loading = false;
+      })
+    },
+
 
 
 

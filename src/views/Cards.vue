@@ -70,13 +70,13 @@
                     <tr>
                         <th></th>
                         <th v-if="$store.state.ui_user.cards.col_card_name" class="text-center f16b">
-                            <v-text-field outlined dense prepend-inner-icon="mdi-magnify"/>
+                            <v-text-field v-model="search.card_name" @keyup="search_card" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
                         <th v-if="$store.state.ui_user.cards.col_card_priceDinar" class="text-center f16b">
-                            <v-text-field outlined dense prepend-inner-icon="mdi-magnify"/>
+                            <v-text-field v-model="search.card_priceDinar" @keyup="search_card" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
                         <th v-if="$store.state.ui_user.cards.col_card_priceDO" class="text-center f16b">
-                            <v-text-field outlined dense prepend-inner-icon="mdi-magnify"/>
+                            <v-text-field v-model="search.card_priceDO" @keyup="search_card" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
 
                         <th></th>
@@ -88,8 +88,8 @@
                     <tr v-for="card in pageOfItems" :key="card.card_id" >
                         <td class="text-center f16">{{cards.indexOf(card)+1}}</td>
                         <td v-if="$store.state.ui_user.cards.col_card_name" class="text-center f16">{{card.card_name}}</td>
-                        <td v-if="$store.state.ui_user.cards.col_card_priceDinar" class="text-center f16">{{card.card_priceDinar}}</td>
-                        <td v-if="$store.state.ui_user.cards.col_card_priceDO"  class="text-center f16">{{card.card_priceDO}}</td>
+                        <td v-if="$store.state.ui_user.cards.col_card_priceDinar" class="text-center f16">{{card.card_priceDinar | remove00}}</td>
+                        <td v-if="$store.state.ui_user.cards.col_card_priceDO"  class="text-center f16">{{card.card_priceDO | remove00}}</td>
                         <td  class="text-center f16">
                             <v-btn icon @click="set_card_to_edit(card)">
                                 <v-icon color="primary">mdi-pencil</v-icon>
@@ -151,6 +151,15 @@
             EditCard,
             DeleteCard
         },
+        filters:{
+            remove00:function(value)
+            {
+                if(value != null && value != "" && value != undefined)
+                {
+                    return Math.trunc(value);
+                }
+            },
+        },
         data(){
             return{
                 cards:[],
@@ -158,6 +167,11 @@
                 customLabels,
                 customStyles,
                 pageOfItems: [],
+                search:{
+                    card_name:'',
+                    card_priceDinar:'',
+                    card_priceDO:''
+                }
             }
         },
         methods:{
@@ -194,6 +208,23 @@
                 }).finally(fin=>{
                     this.loading = false
                 })
+            },
+            search_card()
+            {
+                var filterd = this.$store.state.cards.cards;
+
+                filterd = filterd.filter(item=>item.card_name.match(this.search.card_name));
+                if(this.search.card_priceDinar != "" && this.search.card_priceDinar != null && this.search.card_priceDinar != undefined)
+                {
+                    filterd = filterd.filter(item=>item.card_priceDinar==this.search.card_priceDinar);
+                }
+                if(this.search.card_priceDO != "" && this.search.card_priceDO != null && this.search.card_priceDO != undefined)
+                {
+                    filterd = filterd.filter(item=>item.card_priceDO==this.search.card_priceDO);
+                }
+
+                this.cards = filterd;
+
             }
         },
         computed:{

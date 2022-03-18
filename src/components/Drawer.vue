@@ -7,7 +7,7 @@
                 <v-list-item-content>
 
                     <v-list-item-title class="text-h6">
-                        <span class="f-en">hassan56</span>
+                        <span class="f-en">{{$store.state.user.Fullname}}</span>
 
                     </v-list-item-title>
                     <v-list-item-subtitle class="text-center">
@@ -27,14 +27,14 @@
                     dense
                     nav
             >
-                <v-list-item link to="reports">
-                    <v-list-item-icon>
-                        <v-icon color="orange" large>mdi-chart-bar</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title class="f20 text-right">التقارير</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
+<!--                <v-list-item link to="reports" v-if="$store.state.user.user_level==1">-->
+<!--                    <v-list-item-icon>-->
+<!--                        <v-icon color="orange" large>mdi-chart-bar</v-icon>-->
+<!--                    </v-list-item-icon>-->
+<!--                    <v-list-item-content>-->
+<!--                        <v-list-item-title class="f20 text-right">التقارير</v-list-item-title>-->
+<!--                    </v-list-item-content>-->
+<!--                </v-list-item>-->
                 <v-list-item link to="/customers">
                     <v-list-item-icon>
                         <v-icon color="blue" large>mdi-account-group-outline</v-icon>
@@ -43,17 +43,17 @@
                         <v-list-item-title class="f20 text-right">المشتركين</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/towers">
+                <v-list-item link to="/towers" v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
-                        <v-icon large>mdi-eiffel-tower</v-icon>
+                        <v-icon large>mdi-transmission-tower</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title class="f20 text-right">الابراج</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/cards">
+                <v-list-item link to="/cards" v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
-                        <v-icon color="pink" large>mdi-credit-card</v-icon>
+                        <v-icon color="#3bc70e" large>mdi-credit-card</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title class="f20 text-right">الاشتراكات</v-list-item-title>
@@ -84,7 +84,7 @@
                         <v-list-item-title class="f20 text-right">ارصدة الوكلاء</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link to="/users">
+                <v-list-item link to="/users" v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
                         <v-icon color="error" large>mdi-lock</v-icon>
                     </v-list-item-icon>
@@ -93,7 +93,7 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-item link @click="$store.commit('BACKUP_DATABASE')">
+                <v-list-item link to="/backups"  v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
                         <v-icon color="#d3d1d3" large>mdi-database-arrow-down</v-icon>
                     </v-list-item-icon>
@@ -101,23 +101,23 @@
                         <v-list-item-title class="f20 text-right">نسخة احتياطية</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link>
-                    <v-list-item-icon>
-                        <v-icon color="orange" large>mdi-monitor</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-content>
-                        <v-list-item-title class="f20 text-right">نسخة Windows</v-list-item-title>
-                    </v-list-item-content>
-                </v-list-item>
-                <v-list-item link>
+<!--                <v-list-item link  v-if="$store.state.user.user_level==1">-->
+<!--                    <v-list-item-icon>-->
+<!--                        <v-icon color="orange" large>mdi-monitor</v-icon>-->
+<!--                    </v-list-item-icon>-->
+<!--                    <v-list-item-content>-->
+<!--                        <v-list-item-title class="f20 text-right">نسخة Windows</v-list-item-title>-->
+<!--                    </v-list-item-content>-->
+<!--                </v-list-item>-->
+                <v-list-item link to="settings"  v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
                         <v-icon color="info" large>mdi-cog</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
-                        <v-list-item-title class="f20 text-right">اعدادات الموقع</v-list-item-title>
+                        <v-list-item-title class="f20 text-right">الاعدادات</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link>
+                <v-list-item link href="t el://07810780497"  v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
                         <v-icon color="success" large>mdi-phone</v-icon>
                     </v-list-item-icon>
@@ -129,7 +129,7 @@
             </v-list>
             <template v-slot:append>
                 <div class="pa-2">
-                    <v-btn block color="error">
+                    <v-btn block color="error" @click="$store.commit('LOGOUT')">
                         <v-icon>mdi-exit-run</v-icon>
                         <span class="f20">تسجيل الخروج</span>
                     </v-btn>

@@ -1,7 +1,7 @@
 <template>
     <v-card class="pa-0" elevation="1">
         <v-card-title>
-            <v-icon large>mdi-eiffel-tower</v-icon>
+            <v-icon large>mdi-transmission-tower</v-icon>
             <span class="f20b mr-2">الابراج </span>
         </v-card-title>
         <v-divider/>
@@ -94,7 +94,7 @@
                     <tr v-for="tower in pageOfItems" :key="tower.brig_id" >
                         <td class="text-center f16">{{towers.indexOf(tower)+1}}</td>
                         <td  v-if="$store.state.ui_user.towers.col_brig_name" class="text-center f16">{{tower.brig_name}}</td>
-                        <td  v-if="$store.state.ui_user.towers.col_brig_main" class="text-center f16">{{tower.brig_main | brig_main_filter}}</td>
+                        <td  v-if="$store.state.ui_user.towers.col_brig_main" class="text-center f16">{{tower.brig_main | brig_main_filter2}}</td>
                         <td  v-if="$store.state.ui_user.towers.col_brig_type" class="text-center f16">{{tower.brig_type | brig_type_filter}}</td>
                         <td  v-if="$store.state.ui_user.towers.col_count_customers" class="text-center f16">{{tower.count_customers}}</td>
                         <td  class="text-center f16">
@@ -159,32 +159,32 @@
             JwPagination
         },
         filters:{
-            brig_main_filter:function (value) {
-                if(value==1){
+            brig_main_filter2:function (value) {
+                if(value==1 || value=="1"){
                     return "رئيسي";
                 }
-                if(value==0){
+                if(value==0 || value =="0"){
                     return "فرعي";
                 }
 
             },
             brig_type_filter:function (value) {
-                if(value==1){
+                if(value==1 || value=="1"){
                     return "ايرثلنك";
                 }
-                if(value==2){
+                if(value==2 || value=="2"){
                     return "جزيرة";
                 }
-                if(value==3){
+                if(value==3 || value=="3"){
                     return "SAS3";
                 }
-                if(value==4){
+                if(value==4 || value=="4"){
                     return "SAS4";
                 }
-                if(value==5){
+                if(value==5 || value=="5"){
                     return "بث رقمي";
                 }
-                if(value==6){
+                if(value==6 || value=="6"){
                     return "اخرى";
                 }
 

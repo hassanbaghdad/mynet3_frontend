@@ -2,18 +2,16 @@
   <!-- App.vue -->
 
   <v-app>
-    <Drawer/>
+    <Drawer v-if="$store.state.drawer_show"/>
 
     <v-app-bar app dark elevation="5" >
       <v-app-bar-nav-icon @click="$store.state.drawer=!$store.state.drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title class="f-en">MYNET3</v-toolbar-title>
+      <v-toolbar-title class="f20">{{$store.state.settings.site_name}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
-      <v-btn icon @click="$vuetify.rtl = !$vuetify.rtl">
-        <v-icon>mdi-google-translate</v-icon>
-      </v-btn>
+
 
       <v-btn icon @click="$vuetify.theme.dark=!$vuetify.theme.dark">
         <v-icon v-if="$vuetify.theme.dark">mdi-white-balance-sunny</v-icon>

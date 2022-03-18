@@ -17,6 +17,15 @@
                     </template>
                     <span>اضافة مشرف</span>
                 </v-tooltip>
+                <v-tooltip bottom>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn disabled class="mr-2" fab small color="pink"  v-bind="attrs" v-on="on" @click="$store.state.users.forms.set_customers=true">
+                            <v-icon color="white">mdi-account-multiple-check</v-icon>
+                        </v-btn>
+                    </template>
+                    <span>تخصيص مشتركين</span>
+                </v-tooltip>
+
                 <v-spacer/>
                 <div class="text-center">
                     <v-menu offset-y :close-on-content-click="false">
@@ -34,6 +43,9 @@
                             </v-list-item>
                             <v-list-item>
                                 <v-checkbox class="ma-0 pa-0"  label="الصلاحية" v-model="$store.state.ui_user.users.col_user_level"/>
+                            </v-list-item>
+                            <v-list-item>
+                                <v-checkbox class="ma-0 pa-0"  label="تخصبص" v-model="$store.state.ui_user.users.col_user_type"/>
                             </v-list-item>
 
 
@@ -63,6 +75,7 @@
                         <th v-if="$store.state.ui_user.users.col_Fullname" class="text-center f16b">الاسم</th>
                         <th v-if="$store.state.ui_user.users.col_username" class="text-center f16b">اليوزر</th>
                         <th v-if="$store.state.ui_user.users.col_user_level" class="text-center f16b">الصلاحية</th>
+                        <th v-if="$store.state.ui_user.users.col_user_type" class="text-center f16b">تخصيص</th>
                         <th class="text-center f16b">خيارات</th>
 
 
@@ -73,10 +86,13 @@
                             <v-text-field v-model="search.Fullname" @keyup="search_user" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
                         <th v-if="$store.state.ui_user.users.col_username" class="text-center f16b">
-                            <v-text-field v-model="search.username" @keyup="search_user" outlined dense prepend-inner-icon="mdi-magnify"/>
+                            <v-text-field v-model="search.user_name" @keyup="search_user" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
                         <th v-if="$store.state.ui_user.users.col_user_level" class="text-center f16b">
                             <v-select @change="search_user" v-model="search.user_level" :items="ranks" item-text="label" item-value="value" outlined dense prepend-inner-icon="mdi-magnify"/>
+                        </th>
+                        <th v-if="$store.state.ui_user.users.col_user_type" class="text-center f16b">
+                            <v-select @change="search_user" v-model="search.user_type" :items="types" item-text="label" item-value="value" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
 
                         <th></th>
@@ -88,8 +104,9 @@
                     <tr v-for="user in pageOfItems" :key="user.user_id" >
                         <td  class="text-center f16">{{users.indexOf(user)+1}}</td>
                         <td v-if="$store.state.ui_user.users.col_Fullname"  class="text-center f16">{{user.Fullname}}</td>
-                        <td  v-if="$store.state.ui_user.users.col_username" class="text-center f16">{{user.username}}</td>
+                        <td  v-if="$store.state.ui_user.users.col_username" class="text-center f16">{{user.user_name}}</td>
                         <td  v-if="$store.state.ui_user.users.col_user_level" class="text-center f16">{{user.user_level | user_rank}}</td>
+                        <td  v-if="$store.state.ui_user.users.col_user_type" class="text-center f16">{{user.user_type | user_type_f}}</td>
                         <td  class="text-center f16">
                             <v-btn icon @click="set_user_to_edit(user)">
                                 <v-icon color="primary">mdi-pencil</v-icon>
@@ -115,6 +132,7 @@
         <AddUser/>
         <EditUser/>
         <DeleteUser/>
+        <SetCustomers/>
     </v-card>
 </template>
 
@@ -122,6 +140,7 @@
     import AddUser from "@/components/Users/AddUser";
     import EditUser from "@/components/Users/EditUser";
     import DeleteUser from "@/components/Users/DeleteUser";
+    import SetCustomers from "@/components/Users/SetCustomers";
     import JwPagination from 'jw-vue-pagination';
     const customLabels = {
         first: 'الاول',
@@ -149,9 +168,26 @@
             JwPagination,
             AddUser,
             EditUser,
-            DeleteUser
+            DeleteUser,
+            SetCustomers
         },
         filters:{
+            user_type_f:function(value)
+            {
+                if(value != null)
+                {
+                    if(value == 0 || value =="0")
+                    {
+                        return "جميع المشتركين";
+                    }
+                    if(value == 1  || value =="1")
+                    {
+                        return "قائمة مخصصة";
+                    }
+
+
+                }
+            },
           user_rank:function (value) {
             if(value != null)
             {
@@ -180,13 +216,19 @@
                 pageOfItems: [],
                 search:{
                     Fullname:'',
-                    username:'',
-                    user_level:''
+                    user_name:'',
+                    user_level:'',
+                    user_type:''
                 },
                 ranks:[
                     {label:'مدير',value:1},
                     {label:'محاسب',value:2},
                     {label:'وكيل',value:3},
+                ],
+                types:[
+                    {label:'الكل',value:'الكل'},
+                    {label:'جميع المشتركين',value:0},
+                    {label:'قائمة مخصصة',value:1},
                 ]
             }
         },
@@ -209,10 +251,18 @@
             {
                 var filterd = this.$store.state.users.users;
                 filterd = filterd.filter(item=>item.Fullname.match(this.search.Fullname));
-                filterd = filterd.filter(item=>item.username.match(this.search.username));
+                filterd = filterd.filter(item=>item.user_name.match(this.search.user_name));
                 if(this.search.user_level != null && this.search.user_level != "" && this.search.user_level != null)
                 {
                     filterd = filterd.filter(item=>item.user_level==this.search.user_level);
+                }
+                if(this.search.user_type != null && this.search.user_type != "" && this.search.user_type != null && this.search.user_type !='الكل')
+                {
+                        filterd = filterd.filter(item=>item.user_type==this.search.user_type);
+                }
+                if(this.search.user_type == 0)
+                {
+                    filterd = filterd.filter(item=>item.user_type==0);
                 }
                 this.users = filterd;
             },

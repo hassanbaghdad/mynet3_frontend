@@ -15,10 +15,10 @@
                                     <v-card-text>
                                         <v-row justify="center" class="mt-4">
                                             <v-col cols="12">
-                                                <v-text-field append-icon="mdi-account" :rules="req" v-model="user.username" outlined label="اسم المستخدم"></v-text-field>
+                                                <v-text-field append-icon="mdi-account" :rules="req" v-model="user.user_name" outlined label="اسم المستخدم" style="direction: ltr !important;"  @keyup.enter.native="login"></v-text-field>
                                             </v-col>
                                             <v-col cols="12" class="text-center">
-                                                <v-text-field @click:append="show=!show" :type="show?'text':'password'" :append-icon="show?'mdi-eye-off':'mdi-eye'" :rules="req" v-model="user.password" outlined label="كلمة المرور"></v-text-field>
+                                                <v-text-field @click:append="show=!show" :type="show?'text':'password'" :append-icon="show?'mdi-eye-off':'mdi-eye'" :rules="req" v-model="user.password" outlined label="كلمة المرور" style="direction: ltr !important;"  @keyup.enter.native="login"></v-text-field>
                                                 <v-chip v-show="error" class="f16 pa-2 text-center" color="error">اسم المستخدم او كلمة المرور غير صحيحة </v-chip>
                                             </v-col>
 
@@ -42,7 +42,7 @@
 
                             <v-divider/>
                             <v-card-actions style="direction: rtl">
-                                <v-btn :loading="loading" @click="login" color="primary" large>
+                                <v-btn :loading="loading" @click="login" color="primary" large @keyup.enter.native="login">
                                     <v-icon>mdi-key</v-icon>
                                     <span class="f16 pa-2">دخول</span>
                                 </v-btn>
@@ -72,12 +72,13 @@
                 valid:true,
                 req:[v=>!!v || 'لايمكن ترك الحقل فارغاً'],
                 user:{
-                    username:'updater',
-                    password:'123456'
+                    user_name:'',
+                    password:''
                 }
             }
         },
         methods:{
+
             async login()
             {
                 if(this.$refs.form.validate())
@@ -85,11 +86,13 @@
                     this.$store.state.ui = [];
                     this.error = false;
                     this.loading = true;
-                    this.$axios.post('api/login',this.user).then(res=>{
+                    this.$axios.post('api/auth/login2',this.user).then(res=>{
 
                         this.$store.state.towers.towers = res.data.towers;
                         this.$store.state.cards.cards = res.data.cards;
                         this.$store.state.user = res.data.user;
+                        this.$store.state.drawer = true;
+                        this.$store.state.drawer_show = true;
 
                         if(res.data.ui_customers.length > 0)
                         {
@@ -111,6 +114,11 @@
                         {
                             this.$store.state.ui_user.users = res.data.ui_users[0];
                         }
+                        if(res.data.settings.length > 0)
+                        {
+                            this.$store.state.settings = res.data.settings[0];
+                            this.$vuetify.theme.dark = res.data.settings[0].dark;
+                        }
 
 
                         localStorage.setItem('token',res.data.user.token);
@@ -127,6 +135,7 @@
         },
         created(){
             this.$store.state.loading = false;
+            this.$store.state.drawer = false;
         }
     }
 </script>

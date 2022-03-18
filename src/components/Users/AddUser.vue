@@ -17,15 +17,17 @@
                             <v-text-field v-model="user.Fullname" :rules="req" outlined label="اسم النشرف" prepend-inner-icon="mdi-info"/>
                         </v-col>
                         <v-col cols="12" >
-                            <v-text-field v-model="user.username" :rules="req" outlined label="يوزر المشرف" prepend-inner-icon="mdi-user-account"/>
+                            <v-text-field v-model="user.user_name" :rules="req" outlined label="يوزر المشرف" prepend-inner-icon="mdi-user-account"/>
                         </v-col>
                         <v-col cols="12">
-                            <v-text-field v-model="user.passsword" :rules="req" outlined label="باسوورد المشرف" prepend-inner-icon="mdi-lock"/>
+                            <v-text-field v-model="user.user_pass" :rules="req" outlined label="باسوورد المشرف" prepend-inner-icon="mdi-lock"/>
                         </v-col>
                         <v-col cols="12">
                             <v-select :items="ranks" item-value="value" item-text="label" v-model="user.user_level" :rules="req" outlined label="صلاحية المشرف" prepend-inner-icon="mdi-account-details"/>
                         </v-col>
-
+                        <v-col cols="12">
+                            <v-select :items="types" item-value="value" item-text="label" v-model="user.user_type"  outlined label="تخصيص" prepend-inner-icon="mdi-account-details"/>
+                        </v-col>
 
 
                     </v-row>
@@ -58,14 +60,19 @@
                 req:[v=>!!v ||'لايمكن ترك هذا الحقل فارغاً'],
                 user:{
                     Fullname:'',
-                    username:'',
-                    passsword:'',
+                    user_name:'',
+                    user_pass:'',
                     user_level:'',
+                    user_type:0
                 },
                 ranks:[
                     {label:'مدير',value:1},
                     {label:'محاسب',value:2},
                     {label:'وكيل',value:3},
+                ],
+                types:[
+                    {label:'جميع المشتركين',value:0},
+                    {label:'قائمة مخصصة',value:1},
                 ]
 
             }

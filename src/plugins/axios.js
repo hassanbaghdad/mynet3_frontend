@@ -6,7 +6,9 @@ import router from '@/router/index'
 
 // Full config:  https://github.com/axios/axios#request-config
 //axios.defaults.baseURL = 'http://127.0.0.1:85';
-axios.defaults.baseURL = 'https://my-net.pro/mynet_backend/public/';
+axios.defaults.baseURL = '/mynet-api/public/';
+//axios.defaults.baseURL = 'https://test2.my-net.pro/mynet-api/public/';
+//axios.defaults.baseURL = 'https://my-net.pro/mynet_backend/public/';
 //axios.defaults.headers.common['Authorization'] = 'Bearer '+localStorage.getItem('token');
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 

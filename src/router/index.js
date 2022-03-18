@@ -9,6 +9,8 @@ import Debts from "@/views/Debts";
 import Credits from "@/views/Credits";
 import Users from "@/views/Users";
 import Reports from "@/views/Reports";
+import Settings from "@/views/Settings";
+import Backups from "@/views/Backups";
 Vue.use(VueRouter)
 
 const routes = [
@@ -19,6 +21,10 @@ const routes = [
   },
   {
     path: '/login',
+    name: 'Login',
+    component: Login
+  },{
+    path: '/',
     name: 'Login',
     component: Login
   },
@@ -57,6 +63,16 @@ const routes = [
     path: '/users',
     name: 'Users',
     component: Users
+  },
+  {
+    path: '/backups',
+    name: 'Backups',
+    component: Backups
+  },
+  {
+    path: '/settings',
+    name: 'Settings',
+    component: Settings
   },
 
 ]
