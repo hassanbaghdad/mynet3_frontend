@@ -7,7 +7,7 @@
                 <v-list-item-content>
 
                     <v-list-item-title class="text-h6">
-                        <span class="f-en">{{$store.state.user.Fullname}}</span>
+                        <span class="f18b">{{$store.state.user.Fullname}}</span>
 
                     </v-list-item-title>
                     <v-list-item-subtitle class="text-center">
@@ -37,7 +37,7 @@
 <!--                </v-list-item>-->
                 <v-list-item link to="/customers">
                     <v-list-item-icon>
-                        <v-icon color="blue" large>mdi-account-group-outline</v-icon>
+                        <v-icon color="#75ddb2" large>mdi-account-group</v-icon>
                     </v-list-item-icon>
                     <v-list-item-content>
                         <v-list-item-title class="f20 text-right">المشتركين</v-list-item-title>
@@ -84,6 +84,41 @@
                         <v-list-item-title class="f20 text-right">ارصدة الوكلاء</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
+
+                <v-list-group
+                        v-model="active"
+
+
+                        color="blue"
+                        style="font-size: 90px !important;"
+                >
+                    <template v-slot:activator>
+                        <v-list-item-content>
+                            <v-list-item-title class="f20 text-right" >
+                                <v-icon righ large>mdi-cube-outline</v-icon>
+                                <span class="mr-8" style="width: 100% !important;text-align: center;">المبيعات</span>
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </template>
+
+                    <v-list-item link dense class="text-right" >
+                        <v-list-item-content>
+                            <v-list-item-title class="text-right mr-16">
+                                <v-icon>mdi-plus</v-icon>
+                                <span class="mr-2 f16">فاتورة جديدة</span>
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+                    <v-list-item link to="/store" dense class="text-right">
+                        <v-list-item-content>
+                            <v-list-item-title class="text-right mr-16">
+                                <v-icon >mdi-shape</v-icon>
+                                <span class="mr-2 f16">المخزن</span>
+                            </v-list-item-title>
+                        </v-list-item-content>
+                    </v-list-item>
+
+                </v-list-group>
                 <v-list-item link to="/users" v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
                         <v-icon color="error" large>mdi-lock</v-icon>
@@ -117,7 +152,7 @@
                         <v-list-item-title class="f20 text-right">الاعدادات</v-list-item-title>
                     </v-list-item-content>
                 </v-list-item>
-                <v-list-item link href="t el://07810780497"  v-if="$store.state.user.user_level==1">
+                <v-list-item link href="tel://07810780497"  v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
                         <v-icon color="success" large>mdi-phone</v-icon>
                     </v-list-item-icon>
@@ -148,6 +183,7 @@
                     { title: 'My Account', icon: 'mdi-account' },
                     { title: 'Users', icon: 'mdi-account-group-outline' },
                 ],
+                active:false
             }
         },
     }

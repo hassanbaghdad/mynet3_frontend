@@ -11,6 +11,7 @@ import Users from "@/views/Users";
 import Reports from "@/views/Reports";
 import Settings from "@/views/Settings";
 import Backups from "@/views/Backups";
+import StoreProducts from "@/views/StoreProducts";
 Vue.use(VueRouter)
 
 const routes = [
@@ -59,6 +60,12 @@ const routes = [
     name: 'Credits',
     component: Credits
   },
+    {
+    path: '/store',
+    name: 'StoreProducts',
+    component: StoreProducts
+  },
+
   {
     path: '/users',
     name: 'Users',

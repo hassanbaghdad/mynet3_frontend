@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-0" elevation="1">
+    <v-card class="pa-0" elevation="1" :loading="$store.state.loading">
         <v-card-title>
             <v-icon large>mdi-transmission-tower</v-icon>
             <span class="f20b mr-2">الابراج </span>

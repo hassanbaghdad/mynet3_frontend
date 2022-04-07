@@ -27,7 +27,7 @@
                             </p>
                             <v-divider/>
                         </v-col>
-                        <v-col cols="12" md="6">
+                        <v-col v-if="$store.state.user.user_level ==1" cols="12" md="6">
                         <v-sheet class="pa-1" outlined  label="تاريخ الانتهاء" prepend-inner-icon="mdi-calendar-month-outline">
                             <p class="f16">تاريخ الاستلام</p>
                             <v-divider/>
@@ -80,7 +80,7 @@
                     cost_name:'',
                     cost_user:'',
                     debts:0,
-                    sand_date:'',
+                    sand_date:moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                     sand_money:0,
                     sand_moneyin:0,
                     sand_notes:'',
@@ -101,7 +101,7 @@
                 }
 
                 this.customer.remaining_money = parseFloat(this.customer.sand_money)-parseFloat(this.customer.sand_moneyin) + parseFloat(this.customer.debts)
-                console.log( this.customer.remaining_money)
+
             },
             async get_customer_debts()
             {

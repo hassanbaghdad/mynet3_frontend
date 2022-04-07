@@ -7,7 +7,7 @@
     <v-app-bar app dark elevation="5" >
       <v-app-bar-nav-icon @click="$store.state.drawer=!$store.state.drawer"></v-app-bar-nav-icon>
 
-      <v-toolbar-title class="f20">{{$store.state.settings.site_name}}</v-toolbar-title>
+      <v-toolbar-title class="f18b">{{$store.state.settings.site_name}}</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -27,36 +27,36 @@
 
       <v-container fluid>
         <!-----LOADING----->
-        <v-sheet elevation="0" v-if="$store.state.loading">
-          <div  style="width: 100%;height: 100%;position: absolute;background-color: white;">
-            <div  style="width: 100%;height: 100%;position: relative;background-color: white;">
-              <div class="d-flex" style="width: 100%;height: 100%;position: absolute;background-color: white;z-index: 2">
-                <!--                            <v-progress-circular-->
-                <!--                                    class="align-self-center ma-auto"-->
-                <!--                                    indeterminate-->
-                <!--                                    size="64"-->
-                <!--                                    color="primary"-->
-                <!--                            ></v-progress-circular>-->
-                <div class="container2 text-center ma-auto" style="direction: ltr;">
-                  <div class="loading2 text-center ma-auto" >
-                    <div class="loading__letter">M</div>
-                    <div class="loading__letter">Y</div>
-                    <div class="loading__letter" style="color: #ff8a10 !important;">N</div>
-                    <div class="loading__letter">E</div>
-                    <div class="loading__letter">T</div>
-                    <div class="loading__letter">.</div>
-                    <div class="loading__letter">.</div>
-                    <div class="loading__letter">.</div>
-                  </div>
-                </div>
+<!--        <v-sheet elevation="0" v-if="$store.state.loading">-->
+<!--          <div  style="width: 100%;height: 100%;position: absolute;background-color: white;">-->
+<!--            <div  style="width: 100%;height: 100%;position: relative;background-color: white;">-->
+<!--              <div class="d-flex" style="width: 100%;height: 100%;position: absolute;background-color: white;z-index: 2">-->
+<!--                &lt;!&ndash;                            <v-progress-circular&ndash;&gt;-->
+<!--                &lt;!&ndash;                                    class="align-self-center ma-auto"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                    indeterminate&ndash;&gt;-->
+<!--                &lt;!&ndash;                                    size="64"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                    color="primary"&ndash;&gt;-->
+<!--                &lt;!&ndash;                            ></v-progress-circular>&ndash;&gt;-->
+<!--                <div class="container2 text-center ma-auto" style="direction: ltr;">-->
+<!--                  <div class="loading2 text-center ma-auto" >-->
+<!--                    <div class="loading__letter">M</div>-->
+<!--                    <div class="loading__letter">Y</div>-->
+<!--                    <div class="loading__letter" style="color: #ff8a10 !important;">N</div>-->
+<!--                    <div class="loading__letter">E</div>-->
+<!--                    <div class="loading__letter">T</div>-->
+<!--                    <div class="loading__letter">.</div>-->
+<!--                    <div class="loading__letter">.</div>-->
+<!--                    <div class="loading__letter">.</div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-              </div>
+<!--              </div>-->
 
-            </div>
+<!--            </div>-->
 
-          </div>
+<!--          </div>-->
 
-        </v-sheet>
+<!--        </v-sheet>-->
         <!-----LOADING----->
 
 

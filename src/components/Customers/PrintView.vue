@@ -13,12 +13,26 @@
                 <!-- SOURCE -->
                 <div id="printMe" >
                   <div class="container">
+
+
                       <table class="text-center mt-4 pa-4 f16" style="direction: rtl;font-family: Cairo !important;width: 100%;height: 100%;border: 1px solid black !important;">
                           <thead>
                           <tr class="ma-0 pa-0" style="border: 1px solid black !important">
                               <th scope="col" colspan="2" class="ma-0 pa-0" style="padding: 0px !important;border: 1px solid black !important">
-                                  <div class="d-flex text-center ma-0" style="background-color: #4e4e4e;color: white;height: 60px;width: 100%">
-                                      <span class="align-self-center text-center" style="width: 100%;">مكتب المنتظر لخدمات الانترنيت</span>
+                                  <div class="d-flex text-center ma-0 pa-4" style="background-color: #4e4e4e;color: white;height: 100px;width: 100%">
+
+                                      <v-row justify="center">
+                                          <v-col cols="12">
+                                              <span style="width: 100%;">{{$store.state.settings.site_name}}</span>
+                                          </v-col>
+                                          <v-col cols="6">
+                                              <span style="float: right">{{$store.state.settings.address}}</span>
+                                          </v-col>
+                                          <v-col cols="6">
+                                              <span style="float: left">{{$store.state.settings.phone}}</span>
+                                          </v-col>
+                                      </v-row>
+
                                   </div>
 
                               </th>

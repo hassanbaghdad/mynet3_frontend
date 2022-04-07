@@ -19,6 +19,13 @@
                                             <v-text-field v-model="settings.current_dollar" prepend-inner-icon="mdi-currency-usd" class="f20 align-self-center" outlined label="سعر الصرف"></v-text-field>
                                         </v-col>
                                         <v-col cols="12">
+                                            <v-text-field v-model="settings.address" prepend-inner-icon="mdi-home" class="f20 align-self-center" outlined label="العنوان"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-text-field v-model="settings.phone" prepend-inner-icon="mdi-phone" class="f20 align-self-center" outlined label="رقم الموبايل"></v-text-field>
+                                        </v-col>
+
+                                        <v-col cols="12">
                                             <v-switch v-model="settings.dark" @change="change_theme" prepend-inner-icon="mdi-currency-usd" class="f20 align-self-center" outlined label="مظهر داكن"></v-switch>
                                         </v-col>
                                         <v-col cols="12">
@@ -48,7 +55,9 @@
                 settings:{
                     site_name:'',
                     current_dollar:'',
-                    dark:this.$vuetify.theme.dark
+                    dark:this.$vuetify.theme.dark,
+                    address:'',
+                    phone:''
                 }
             }
         },
@@ -75,7 +84,7 @@
             {
                await this.$axios.get('api/auth/get-settings').then(res=>{
                     this.settings = res.data[0];
-                   this.$store.state.settings.site_name =res.data[0].site_name;
+                   this.$store.state.settings =res.data[0];
                })
             }
         },

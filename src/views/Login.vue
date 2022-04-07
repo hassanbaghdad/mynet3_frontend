@@ -83,6 +83,7 @@
             {
                 if(this.$refs.form.validate())
                 {
+                    localStorage.clear();
                     this.$store.state.ui = [];
                     this.error = false;
                     this.loading = true;

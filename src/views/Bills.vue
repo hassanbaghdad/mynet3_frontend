@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-0" elevation="1">
+    <v-card class="pa-0" elevation="1" :loading="$store.state.loading">
         <v-card-title class="ma-0 pa-0">
             <v-toolbar elevation="0" class="ma-0 pa-0">
                 <v-icon large>mdi-file-sign</v-icon>
@@ -72,11 +72,29 @@
                     <input v-model="search.to_date" @change="search_bill" type="date" style="border: 1px solid black;width: 75%"/>
                 </v-col>
 
+                <v-col cols="12" lg="3">
+                    <v-select @change="change_size" v-model="inPage" :items="numbers" item-value="value" item-text="label" dense outlined label="عدد النتائج"></v-select>
+                </v-col>
+
 
 
             </v-row>
 
         </v-card-title>
+        <v-divider/>
+        <v-simple-table style="direction: rtl">
+            <template v-slot:default>
+                <thead>
+                <tr>
+                    <th class="f16b text-center" colspan="1">مجموع الواصل</th>
+                    <th class="f16b text-center"  colspan="1">{{sum_moneyin | money_iq}}</th>
+                    <th class="f16b text-center"  colspan="1">المجموع الكلي </th>
+                    <th class="f16b text-center"  colspan="1">{{sum_money | money_iq}}</th>
+
+                </tr>
+                </thead>
+            </template>
+        </v-simple-table>
         <v-divider/>
         <v-card-text>
             <v-simple-table style="direction: rtl">
@@ -103,7 +121,7 @@
                             <v-text-field v-model="search.Sand_id" @keyup="search_bill" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
                         <th v-if="$store.state.ui_user.bills.col_Sand_moneyType" class="text-center f16b">
-                            <v-text-field outlined dense prepend-inner-icon="mdi-magnify"/>
+                            <v-select :items="SandTypes" item-text="label" item-value="value" v-model="search.Sand_moneyType" @change="search_bill" outlined dense prepend-inner-icon="mdi-magnify"/>
                         </th>
                         <th v-if="$store.state.ui_user.bills.col_cost_name" class="text-center f16b">
                             <v-text-field v-model="search.cost_name" @keyup="search_bill" outlined dense prepend-inner-icon="mdi-magnify"/>
@@ -139,8 +157,8 @@
                         <td v-if="$store.state.ui_user.bills.col_Sand_moneyType"  class="text-center f16">{{item.Sand_moneyType | moneyType}}</td>
                         <td v-if="$store.state.ui_user.bills.col_cost_name"  class="text-center f16">{{item.cost_name}}</td>
                         <td v-if="$store.state.ui_user.bills.col_cost_user"  class="text-center f16">{{item.cost_user}}</td>
-                        <td v-if="$store.state.ui_user.bills.col_Sand_money"  class="text-center f16">{{item.Sand_money | remove00}}</td>
-                        <td v-if="$store.state.ui_user.bills.col_Sand_moneyin"  class="text-center f16">{{item.Sand_moneyin | remove00}}</td>
+                        <td v-if="$store.state.ui_user.bills.col_Sand_money"  class="text-center f16">{{item.Sand_money  | money_iq}}</td>
+                        <td v-if="$store.state.ui_user.bills.col_Sand_moneyin"  class="text-center f16">{{item.Sand_moneyin  | money_iq}}</td>
                         <td v-if="$store.state.ui_user.bills.col_Sand_cardtype" class="text-center f16">{{item.Sand_cardtype}}</td>
                         <td v-if="$store.state.ui_user.bills.col_Sand_date" class="text-center f16">{{item.Sand_date | datesubfilter}}</td>
                         <td v-if="$store.state.ui_user.bills.col_sand_user"  class="text-center f16">{{item.sand_user}}</td>
@@ -152,7 +170,7 @@
                                         <v-icon color="primary">mdi-printer</v-icon>
                                     </v-btn>
                                 </v-col>
-                                <v-col cols="6" class="pa-0 ma-0">
+                                <v-col v-if="$store.state.user.user_level ==1" cols="6" class="pa-0 ma-0">
                                     <v-btn @click="set_bill_to_delete(item)" icon class="mr-4">
                                         <v-icon color="error">mdi-delete</v-icon>
                                     </v-btn>
@@ -161,13 +179,15 @@
                         </td>
                     </tr>
                     </tbody>
+
                 </template>
             </v-simple-table>
         </v-card-text>
         <v-divider/>
         <v-card elevation="1" class="f14 text-center pa-4">
-            <jw-pagination :pageSize="15" :maxPages="$vuetify.breakpoint.xs?1:10"  :items="bills" :labels="customLabels" :styles="customStyles" @changePage="onChangePage"></jw-pagination>
+            <jw-pagination :pageSize="inPage" :maxPages="$vuetify.breakpoint.xs?1:10"  :items="bills" :labels="customLabels" :styles="customStyles" @changePage="onChangePage"></jw-pagination>
         </v-card>
+
         <DeleteBill/>
         <PrintView/>
     </v-card>
@@ -206,6 +226,13 @@
             PrintView
         },
         filters:{
+            money_iq:function(value){
+                if(value != null || value != 0 || value !=undefined)
+                {
+                    value = Math.trunc(value);
+                    return value.toLocaleString('en-IQ')
+                }
+            },
             remove00:function(value)
             {
                 if(value != null && value != "" && value != undefined)
@@ -249,10 +276,11 @@
                 customLabels,
                 customStyles,
                 pageOfItems: [],
-
+                sum_money:0,
+                sum_moneyin:0,
                 search:{
                     Sand_id:'',
-                    Sand_moneyType:'',
+                    Sand_moneyType:'الكل',
                     cost_name:'',
                     cost_user:'',
                     Sand_money:'',
@@ -262,7 +290,23 @@
                     sand_user:'',
                     from_date:'',
                     to_date:moment(new Date()).format('YYYY-MM-DD')
-                }
+                },
+                numbers:[
+                    {label:'50',value:50},
+                    {label:'100',value:100},
+                    {label:'300',value:300},
+                    {label:'500',value:500},
+                    {label: 'الكل' + ' ('+ this.$store.state.bills.bills.length +')',value:this.$store.state.bills.bills.length},
+                ],
+                inPage:50,
+
+                SandTypes:[
+                    {label:'الكل',value:"الكل"},
+                    {label:'تفعيل',value:1},
+                    {label:'تسديد',value:2},
+                    {label:'دين',value:6},
+                ],
+
             }
         },
         methods:{
@@ -294,6 +338,8 @@
                     {
                         x.Sand_date = "-";
                     }
+                    x.Sand_money = Math.trunc(x.Sand_money);
+                    x.Sand_moneyin = Math.trunc(x.Sand_moneyin);
                     return x;
                 });
 
@@ -303,7 +349,9 @@
                 }
                 if(this.search.Sand_money != '' && this.search.Sand_money != null)
                 {
+
                     filterd = filterd.filter(item=>item.Sand_money==this.search.Sand_money);
+
                 }
                 if(this.search.Sand_moneyin != '' && this.search.Sand_moneyin != null)
                 {
@@ -318,15 +366,37 @@
                 {
                     filterd = filterd.filter(item=>item.Sand_date <= moment(this.search.to_date).add(1,"days").format("YYYY-MM-DD"));
                 }
+                if(this.search.Sand_moneyType != null && this.search.Sand_moneyType !="" && this.search.Sand_moneyType != undefined )
+                {
+                    if(this.search.Sand_moneyType != "الكل")
+                    {
+                        if(this.search.Sand_moneyType == 1)
+                        {
+                            filterd = filterd.filter(item=>item.Sand_moneyType==1);
+                        }
+                        if(this.search.Sand_moneyType == 2)
+                        {
+                            filterd = filterd.filter(item=>item.Sand_moneyType==2);
+                        }
+                        if(this.search.Sand_moneyType == 6)
+                        {
+                            filterd = filterd.filter(item=>item.Sand_moneyType==6);
+                        }
 
+                    }
+                }
 
                 filterd = filterd.filter(item=>item.cost_name.match(this.search.cost_name));
                 filterd = filterd.filter(item=>item.cost_user.match(this.search.cost_user));
                 filterd = filterd.filter(item=>item.Sand_cardtype.match(this.search.Sand_cardtype));
                 filterd = filterd.filter(item=>item.Sand_date.match(this.search.Sand_date));
                 filterd = filterd.filter(item=>item.sand_user.match(this.search.sand_user));
-
-
+                this.sum_money = 0 ;
+                this.sum_moneyin = 0 ;
+                var bills2 = filterd.map(x=>{
+                    this.sum_money += parseFloat(x.Sand_money);
+                    this.sum_moneyin += parseFloat(x.Sand_moneyin);
+                });
                 this.bills = filterd;
             },
             async save_ui_bills()
@@ -347,6 +417,9 @@
                 }).finally(fin=>{
                     this.loading = false
                 })
+            },
+            change_size(){
+                this.search_bill()
             }
         },
         computed:{
@@ -357,6 +430,13 @@
         watch:{
             get_bills:function (new_bills) {
                 this.bills = new_bills;
+                this.sum_money = 0 ;
+                this.sum_moneyin = 0 ;
+                var bills2 = new_bills.map(x=>{
+                    this.sum_money += parseFloat(x.Sand_money);
+                    this.sum_moneyin += parseFloat(x.Sand_moneyin);
+                });
+
             }
         },
 

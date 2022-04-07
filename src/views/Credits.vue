@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-0" elevation="1">
+    <v-card class="pa-0" elevation="1" :loading="$store.state.loading">
         <v-card-title class="ma-0 pa-0">
             <v-toolbar elevation="0" class="ma-0 pa-0">
                 <v-icon large>mdi-file-sign</v-icon>

@@ -185,14 +185,16 @@ export default new Vuex.Store({
     settings:{
       site_name:'',
       current_dollar:0,
-      dark:false
+      dark:false,
+      address:'بلبلالبا',
+      phone:'07714283610'
     }
   },
   mutations: {
 
     async GET_CUSTOMERS(state)
     {
-     // state.loading = true;
+      state.loading = true;
       state.customers.forms.details = false;
       state.customers.forms.active = false;
       state.customers.forms.add_customer = false;
@@ -216,7 +218,7 @@ export default new Vuex.Store({
     },
     async GET_TOWERS(state)
     {
-      //state.loading = true;
+      state.loading = true;
       axios.get('api/get-towers').then(res=>{
         state.towers.towers = res.data;
       }).catch(err=>{
@@ -230,7 +232,7 @@ export default new Vuex.Store({
     },
     async GET_CARDS(state)
     {
-      //state.loading = true;
+      state.loading = true;
       axios.get('api/get-cards').then(res=>{
         state.cards.cards = res.data;
       }).catch(err=>{
@@ -244,7 +246,7 @@ export default new Vuex.Store({
     },
     async GET_BILLS(state)
     {
-      //state.loading = true;
+      state.loading = true;
       axios.get('api/get-bills').then(res=>{
         state.bills.bills = res.data;
       }).catch(err=>{
@@ -258,7 +260,7 @@ export default new Vuex.Store({
     },
     async GET_USERS(state)
     {
-      //state.loading = true;
+      state.loading = true;
       state.users.forms.add_user = false;
       state.users.forms.edit_user = false;
       state.users.forms.delete_user = false;
@@ -277,7 +279,7 @@ export default new Vuex.Store({
     },
     async GET_BACKUPS(state)
     {
-     // state.loading = true;
+      state.loading = true;
 
       axios.get('api/auth/get-backups').then(res=>{
         state.backups.backups = res.data;
@@ -294,7 +296,7 @@ export default new Vuex.Store({
 
     async GET_DEBTS_TO_US(state)
     {
-     // state.loading = true;
+      state.loading = true;
       axios.get('api/get-debts-to-us').then(res=>{
         state.debts.debts_to_us = res.data;
       }).catch(err=>{
@@ -308,7 +310,7 @@ export default new Vuex.Store({
     },
     async GET_DEBTS_TO_THEM(state)
     {
-     // state.loading = true;
+      state.loading = true;
       axios.get('api/get-debts-to-them').then(res=>{
         state.debts.debts_to_them = res.data;
       }).catch(err=>{
@@ -324,7 +326,7 @@ export default new Vuex.Store({
     {
       if(type=="دينار")
       {
-        //state.loading = true;
+        state.loading = true;
 
         axios.get('api/get-credits-di').then(res=>{
           state.credits.credits = res.data;
@@ -339,7 +341,7 @@ export default new Vuex.Store({
       }
       if(type=="دولار")
       {
-       // state.loading = true;
+        state.loading = true;
 
         axios.get('api/get-credits-do').then(res=>{
           state.credits.credits = res.data;

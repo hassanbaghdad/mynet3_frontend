@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-0" elevation="1">
+    <v-card class="pa-0" elevation="1" :loading="$store.state.loading">
 
         <v-divider/>
         <v-card-title class="ma-0 pa-0">
@@ -55,6 +55,19 @@
             </v-toolbar>
         </v-card-title>
         <v-divider/>
+        <v-simple-table style="direction: rtl">
+            <template v-slot:default>
+                <thead>
+                <tr>
+                    <th class="f16b text-center" colspan="1">عدد الوصولات</th>
+                    <th class="f16b text-center"  colspan="1">{{count_debts}}</th>
+                    <th class="f16b text-center" colspan="1">المجموع</th>
+                    <th class="f16b text-center"  colspan="1">{{sum_moneyin | money_iq}}</th>
+
+                </tr>
+                </thead>
+            </template>
+        </v-simple-table>
         <v-card-text>
             <v-simple-table style="direction: rtl">
                 <template v-slot:default>
@@ -167,6 +180,13 @@
     export default {
         name: "DebtsToThem",
         filters:{
+            money_iq:function(value){
+                if(value != null || value != 0 || value !=undefined)
+                {
+                    value = Math.trunc(value);
+                    return value.toLocaleString('en-IQ')
+                }
+            },
             remove00:function(value)
             {
                 if(value != null && value != "" && value != undefined)
@@ -200,7 +220,9 @@
                     Sand_nextdate:'',
                     Sand_carry:'',
                     cost_phone:''
-                }
+                },
+                sum_moneyin:0,
+                count_debts:0
             }
         },
         methods:{
@@ -272,7 +294,10 @@
 
                     filterd = filterd.filter(item=>item.Sand_carry==this.search.Sand_carry);
                 }
-
+                this.sum_moneyin = 0 ;
+                var debts = filterd.map(x=>{
+                    this.sum_moneyin += parseFloat(x.Sand_carry);
+                });
                 this.debts_to_them = filterd;
             }
         },
@@ -284,7 +309,13 @@
         watch:{
             get_debts_to_them:function (new_debts) {
                 this.debts_to_them = new_debts;
+                this.sum_moneyin = 0 ;
+                var debts = new_debts.map(x=>{
+                    this.sum_moneyin += parseFloat(x.Sand_carry);
+                });
+                this.count_debts = new_debts.length;
             }
+
         },
         created(){
             this.$store.commit("GET_DEBTS_TO_THEM");
