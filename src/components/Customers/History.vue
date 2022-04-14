@@ -32,28 +32,28 @@
                             <tr>
                                 <th></th>
                                 <th class="text-center f16b">
-                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                    <v-text-field v-model="search.Sand_id" @keyup="search_sand" prepend-inner-icon="mdi-magnify"/>
                                 </th>
                                 <th class="text-center f16b">
-                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                    <v-text-field v-model="search.Sand_date" @keyup="search_sand" prepend-inner-icon="mdi-magnify"/>
                                 </th>
                                 <th class="text-center f16b">
-                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                    <v-select :items="SandTypes" item-value="value" item-text="label" v-model="search.Sand_moneyType" @change="search_sand" prepend-inner-icon="mdi-magnify"/>
                                 </th>
                                 <th class="text-center f16b">
-                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                    <v-text-field v-model="search.Sand_money" @keyup="search_sand" prepend-inner-icon="mdi-magnify"/>
                                 </th>
                                 <th class="text-center f16b">
-                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                    <v-text-field v-model="search.Sand_moneyin" @keyup="search_sand" prepend-inner-icon="mdi-magnify"/>
                                 </th>
                                 <th class="text-center f16b">
-                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                    <v-text-field v-model="search.Sand_cardtype" @keyup="search_sand" prepend-inner-icon="mdi-magnify"/>
                                 </th>
                                 <th class="text-center f16b">
-                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                    <v-text-field v-model="search.Sand_dateto" @keyup="search_sand" prepend-inner-icon="mdi-magnify"/>
                                 </th>
                                 <th class="text-center f16b">
-                                    <v-text-field prepend-inner-icon="mdi-magnify"/>
+                                    <v-text-field v-model="search.sand_user" @keyup="search_sand" prepend-inner-icon="mdi-magnify"/>
                                 </th>
                                 <th class="text-center f16b"></th>
 
@@ -67,8 +67,8 @@
                                 <td class="text-center f16">{{sand.Sand_id}}</td>
                                 <td style="width: 200px" class="text-center f16">{{sand.Sand_date | datefilter}}</td>
                                 <td class="text-center f16">{{sand.Sand_moneyType | moneyType}}</td>
-                                <td class="text-center f16">{{sand.Sand_money}}</td>
-                                <td class="text-center f16">{{sand.Sand_moneyin}}</td>
+                                <td class="text-center f16">{{sand.Sand_money | money_iq}}</td>
+                                <td class="text-center f16">{{sand.Sand_moneyin | money_iq}}</td>
                                 <td class="text-center f16">{{sand.Sand_cardtype}}</td>
                                 <td class="text-center f16">{{sand.Sand_dateto | datefilter}}</td>
                                 <td class="text-center f16">{{sand.sand_user}}</td>
@@ -148,7 +148,14 @@
                     return "دين";
                 }
 
-            }
+            },
+            money_iq:function(value){
+                if(value != null || value != 0 || value !=undefined)
+                {
+                    value = Math.trunc(value);
+                    return value.toLocaleString('en-IQ')
+                }
+            },
         },
         data(){
             return{
@@ -159,7 +166,26 @@
                 pageOfItems: [],
                 customStyles,
                 customLabels,
-                sands:[]
+                sands:this.$store.state.customers.customer_sands,
+                sands2:[],
+                search:{
+                    Sand_cardtype: '',
+                    Sand_date:'',
+                    Sand_dateto: '',
+                    Sand_id:'',
+                    Sand_money:'',
+                    Sand_moneyType: '',
+                    Sand_moneyin: '',
+                    cost_name: '',
+                    cost_user:'',
+                    sand_user: '',
+                },
+                SandTypes:[
+                    {label:'الكل',value:"الكل"},
+                    {label:'تفعيل',value:1},
+                    {label:'تسديد',value:2},
+                    {label:'دين',value:6},
+                ],
             }
         },
         methods:{
@@ -169,7 +195,7 @@
                     this.loading = true;
 
                     await  this.$axios.post('api/get-sands-customer',{cost_id:this.cost_id}).then(res=>{
-                        this.sands = res.data
+                        this.$store.state.customers.customer_sands = res.data;
                     }).catch(err=>{
                         console.log(err)
                     }).finally(fin=>{
@@ -185,6 +211,68 @@
             {
                 this.$store.state.customers.target_sand = sand;
                 this.$store.state.customers.forms.print_view = true;
+            },
+            search_sand(){
+                var filtered = this.$store.state.customers.customer_sands;
+                filtered = filtered.map(x=>{
+                    if(x.Sand_moneyType != null && x.Sand_moneyType != "" && x.Sand_moneyType != undefined)
+                    {
+                        x.Sand_moneyType = x.Sand_moneyType.toString();
+                    }
+                    if(x.Sand_money != null && x.Sand_money != "" && x.Sand_money != undefined)
+                    {
+                        x.Sand_money = x.Sand_money.toString();
+                    }
+                    if(x.Sand_moneyin != null && x.Sand_moneyin != "" && x.Sand_moneyin != undefined)
+                    {
+                        x.Sand_moneyin = x.Sand_moneyin.toString();
+                    }
+                    if(x.Sand_cardtype == null || x.Sand_cardtype == undefined || x.Sand_cardtype == "")
+                    {
+                        x.Sand_cardtype = "";
+                    }
+                    return x;
+
+
+                });
+                if(this.search.Sand_id != "" && this.search.Sand_id != null && this.search.Sand_id != undefined )
+                {
+                    filtered = filtered.filter(item=>item.Sand_id==this.search.Sand_id);
+                }
+                if(this.search.Sand_date != null && this.search.Sand_date != "" && this.search.Sand_date != undefined)
+                {
+                    filtered = filtered.filter(item=>item.Sand_date.match(this.search.Sand_date));
+                }
+                if(this.search.Sand_money != null && this.search.Sand_money != "" && this.search.Sand_money != undefined)
+                {
+                    filtered = filtered.filter(item=>item.Sand_money.match(this.search.Sand_money));
+                }
+                if(this.search.Sand_moneyin != null && this.search.Sand_moneyin != "" && this.search.Sand_moneyin != undefined)
+                {
+                    filtered = filtered.filter(item=>item.Sand_moneyin.match(this.search.Sand_moneyin));
+                }
+                if(this.search.Sand_dateto != null && this.search.Sand_dateto != "" && this.search.Sand_dateto != undefined)
+                {
+                    filtered = filtered.filter(item=>item.Sand_dateto.match(this.search.Sand_dateto));
+                }
+                if(this.search.Sand_cardtype != null && this.search.Sand_cardtype != "" && this.search.Sand_cardtype != undefined)
+                {
+                    filtered = filtered.filter(item=>item.Sand_cardtype.match(this.search.Sand_cardtype));
+                }
+                if(this.search.sand_user != null && this.search.sand_user != "" && this.search.sand_user != undefined)
+                {
+                    filtered = filtered.filter(item=>item.sand_user.match(this.search.sand_user));
+                }
+
+                if(this.search.Sand_moneyType !="الكل" && this.search.Sand_moneyType != "" && this.search.Sand_moneyType !=null)
+                {
+                    filtered = filtered.filter(item=>item.Sand_moneyType ==this.search.Sand_moneyType);
+                }
+
+
+                this.sands = filtered;
+
+
             }
         },
         computed:{
@@ -193,6 +281,9 @@
             },
             customer_form3:function () {
                 return this.$store.state.customers.forms.history;
+            },
+            get_sands:function () {
+                return this.$store.state.customers.customer_sands
             },
 
         },
@@ -212,6 +303,9 @@
                     this.get_sands_customer()
 
                 }
+            },
+            get_sands:function (new_sands) {
+                this.sands = new_sands;
             },
 
         },

@@ -307,6 +307,15 @@
 
                 var filterd = this.$store.state.customers.customers;
                 filterd = filterd.map(x=>{
+                    if(x.cost_pass == null)
+                    {
+                        x.cost_pass = '';
+                    }
+                    if(x.cost_phone == null)
+                    {
+                        x.cost_phone = '';
+                    }
+
                     if(x.cost_address == null)
                     {
                         x.cost_address = '';
@@ -326,6 +335,10 @@
                     if(x.cost_secter == null)
                     {
                         x.cost_secter = '';
+                    }
+                    if(x.brig_name == null)
+                    {
+                        x.brig_name = '';
                     }
 
                     return x;

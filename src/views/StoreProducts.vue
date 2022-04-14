@@ -1,5 +1,5 @@
 <template>
-    <v-card class="pa-0" elevation="1" :loading="$store.state.loading">
+    <v-card class="pa-0" elevation="1" >
         <v-card-title>
             <v-icon large>mdi-cube-outline</v-icon>
             <span class="f20b mr-2">المخزن </span>
@@ -11,7 +11,7 @@
 
                 <v-tooltip bottom>
                     <template v-slot:activator="{ on, attrs }">
-                        <v-btn fab small color="blue"  v-bind="attrs" v-on="on" @click="$store.state.users.forms.add_user=true">
+                        <v-btn fab small color="blue"  v-bind="attrs" v-on="on" @click="$store.state.store.forms.add_product=true">
                             <v-icon color="white">mdi-plus</v-icon>
                         </v-btn>
                     </template>
@@ -86,7 +86,7 @@
 
                     </thead>
                     <tbody>
-                        <tr v-for="item in 9" :key="item">
+                        <tr v-for="item in pageOfItems" :key="item">
                             <th class="text-center f16">{{item}}</th>
                             <th class="text-center f16">نانو</th>
                             <th class="text-center f16">الكترونيات</th>
@@ -122,17 +122,59 @@
             </v-simple-table>
         </v-card-text>
         <v-divider/>
-
+        <v-card elevation="1" class="f14 text-center pa-4">
+            <jw-pagination :pageSize="10" :maxPages="$vuetify.breakpoint.xs?1:10"  :items="products" :labels="customLabels" :styles="customStyles" @changePage="onChangePage"></jw-pagination>
+        </v-card>
+        <AddProduct/>
     </v-card>
 </template>
 
 <script>
+
+    import AddProduct from "@/components/Products/AddProduct";
+    import JwPagination from 'jw-vue-pagination';
+
+    const customLabels = {
+        first: 'الاول',
+        last: 'الاخير',
+        previous: 'السابق',
+        next: 'التالي'
+    };
+    const customStyles = {
+        ul: {
+            direction:'ltr'
+        },
+        li: {
+            display: 'inline-block',
+            border:'1px solid grey',
+            margin:'2px',
+            borderRadius:'5px'
+        },
+        a: {
+            color: 'black'
+        }
+    };
     export default {
         name: "StoreProducts",
+        components:{
+            AddProduct,
+            JwPagination
+        },
         data(){
             return{
-
+                customLabels,
+                customStyles,
+                pageOfItems: [],
+                products:[
+                    1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17
+                ]
             }
+        },
+        methods:{
+            onChangePage(pageOfItems) {
+                // update page of items
+                this.pageOfItems = pageOfItems;
+            },
         }
     }
 </script>

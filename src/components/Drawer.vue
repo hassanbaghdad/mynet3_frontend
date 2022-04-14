@@ -85,40 +85,40 @@
                     </v-list-item-content>
                 </v-list-item>
 
-                <v-list-group
-                        v-model="active"
+<!--                <v-list-group-->
+<!--                        v-model="active"-->
 
 
-                        color="blue"
-                        style="font-size: 90px !important;"
-                >
-                    <template v-slot:activator>
-                        <v-list-item-content>
-                            <v-list-item-title class="f20 text-right" >
-                                <v-icon righ large>mdi-cube-outline</v-icon>
-                                <span class="mr-8" style="width: 100% !important;text-align: center;">المبيعات</span>
-                            </v-list-item-title>
-                        </v-list-item-content>
-                    </template>
+<!--                        color="blue"-->
+<!--                        style="font-size: 90px !important;"-->
+<!--                >-->
+<!--                    <template v-slot:activator>-->
+<!--                        <v-list-item-content>-->
+<!--                            <v-list-item-title class="f20 text-right" >-->
+<!--                                <v-icon righ large>mdi-cube-outline</v-icon>-->
+<!--                                <span class="mr-8" style="width: 100% !important;text-align: center;">المبيعات</span>-->
+<!--                            </v-list-item-title>-->
+<!--                        </v-list-item-content>-->
+<!--                    </template>-->
 
-                    <v-list-item link dense class="text-right" >
-                        <v-list-item-content>
-                            <v-list-item-title class="text-right mr-16">
-                                <v-icon>mdi-plus</v-icon>
-                                <span class="mr-2 f16">فاتورة جديدة</span>
-                            </v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                    <v-list-item link to="/store" dense class="text-right">
-                        <v-list-item-content>
-                            <v-list-item-title class="text-right mr-16">
-                                <v-icon >mdi-shape</v-icon>
-                                <span class="mr-2 f16">المخزن</span>
-                            </v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
+<!--                    <v-list-item link to="/new-product-bill" dense class="text-right" >-->
+<!--                        <v-list-item-content>-->
+<!--                            <v-list-item-title class="text-right mr-16">-->
+<!--                                <v-icon>mdi-plus</v-icon>-->
+<!--                                <span class="mr-2 f16">فاتورة جديدة</span>-->
+<!--                            </v-list-item-title>-->
+<!--                        </v-list-item-content>-->
+<!--                    </v-list-item>-->
+<!--                    <v-list-item link to="/store" dense class="text-right">-->
+<!--                        <v-list-item-content>-->
+<!--                            <v-list-item-title class="text-right mr-16">-->
+<!--                                <v-icon >mdi-shape</v-icon>-->
+<!--                                <span class="mr-2 f16">المخزن</span>-->
+<!--                            </v-list-item-title>-->
+<!--                        </v-list-item-content>-->
+<!--                    </v-list-item>-->
 
-                </v-list-group>
+<!--                </v-list-group>-->
                 <v-list-item link to="/users" v-if="$store.state.user.user_level==1">
                     <v-list-item-icon>
                         <v-icon color="error" large>mdi-lock</v-icon>

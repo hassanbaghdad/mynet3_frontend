@@ -12,6 +12,7 @@ import Reports from "@/views/Reports";
 import Settings from "@/views/Settings";
 import Backups from "@/views/Backups";
 import StoreProducts from "@/views/StoreProducts";
+import NewProductBill from "@/components/Products/NewProductBill";
 Vue.use(VueRouter)
 
 const routes = [
@@ -60,10 +61,15 @@ const routes = [
     name: 'Credits',
     component: Credits
   },
-    {
+  {
     path: '/store',
     name: 'StoreProducts',
     component: StoreProducts
+  },
+  {
+    path: '/new-product-bill',
+    name: 'NewProductBill',
+    component: NewProductBill
   },
 
   {
