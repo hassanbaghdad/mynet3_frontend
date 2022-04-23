@@ -171,20 +171,28 @@ export default new Vuex.Store({
       credits:[]
     },
     store_products:{
-      products:[
-        {item_id:1,item_name:'نانو',item_cat:'الكترونيات',item_priceDinar:50000,item_barcode:'23',item_type:'1',item_color:'ابيض',item_size:'صغير',item_count:4,item_memory:'-'},
-        {item_id:2,item_name:'راوتر',item_cat:'الكترونيات',item_priceDinar:50000,item_barcode:'24',item_type:'1',item_color:'اسود',item_size:'صغير',item_count:6,item_memory:'-'},
-        {item_id:3,item_name:'راوتر',item_cat:'الكترونيات',item_priceDinar:50000,item_barcode:'25',item_type:'1',item_color:'اسود',item_size:'صغير',item_count:3,item_memory:'-'},
-        {item_id:4,item_name:'سماعات',item_cat:'الكترونيات',item_priceDinar:50000,item_barcode:'26',item_type:'1',item_color:'اسود',item_size:'صغير',item_count:7,item_memory:'-'},
-        {item_id:5,item_name:'شاحنة',item_cat:'موبايل',item_priceDinar:50000,item_barcode:'27',item_type:'1',item_color:'اسود',item_size:'صغير',item_count:9,item_memory:'-'},
-        {item_id:6,item_name:'رصيد',item_cat:'موبايل',item_priceDinar:50000,item_barcode:'28',item_type:'1',item_color:'اسود',item_size:'صغير',item_count:15,item_memory:'-'},
-
-      ],
+      products:[],
+      target_item:[],
       forms:{
         add_product:false,
         edit_product:false,
         delete_product:false,
       }
+    },
+    foater:{
+      foater_sell:[],
+      target:[],
+      forms:{
+        delete_sell_fatora:false,
+        print_sell_fatora:false
+      }
+
+    },
+    fatora_debts_to_us:{
+      debts:[]
+    },
+    fatora_debts_to_them:{
+      debts:[]
     },
     users:{
       users:[],
@@ -294,6 +302,75 @@ export default new Vuex.Store({
         state.loading = false;
       })
     },
+    async GET_SELL_FOATER(state)
+    {
+      state.loading = true;
+
+      axios.get('api/get-sell-foater').then(res=>{
+        state.foater.foater_sell = res.data;
+      }).catch(err=>{
+        if(err.response.status == 401)
+        {
+          router.push("/login")
+        }
+
+      }).finally(fin=>{
+        state.loading = false;
+      })
+    },
+    async GET_FATORA_DEBTS_TO_US(state)
+    {
+      state.loading = true;
+
+      axios.get('api/get-fatora-debts-for-us').then(res=>{
+        state.fatora_debts_to_us.debts = res.data;
+      }).catch(err=>{
+        if(err.response.status == 401)
+        {
+          router.push("/login")
+        }
+
+      }).finally(fin=>{
+        state.loading = false;
+      })
+    },
+    async GET_FATORA_DEBTS_TO_THEM(state)
+    {
+      state.loading = true;
+
+      axios.get('api/get-fatora-debts-for-them').then(res=>{
+        state.fatora_debts_to_them.debts = res.data;
+      }).catch(err=>{
+        if(err.response.status == 401)
+        {
+          router.push("/login")
+        }
+
+      }).finally(fin=>{
+        state.loading = false;
+      })
+    },
+
+    async GET_ITEMS(state)
+    {
+      state.loading = true;
+      state.store_products.forms.add_product = false;
+      state.store_products.forms.edit_product = false;
+      state.store_products.forms.delete_product = false;
+
+      axios.get('api/get-items').then(res=>{
+        state.store_products.products = res.data;
+      }).catch(err=>{
+        if(err.response.status == 401)
+        {
+          router.push("/login")
+        }
+
+      }).finally(fin=>{
+        state.loading = false;
+      })
+    },
+
     async GET_BACKUPS(state)
     {
       state.loading = true;

@@ -1,12 +1,12 @@
 <template>
-    <v-dialog max-width="600" class="pa-0 ma-9" v-model="$store.state.store_products.forms.add_product">
+    <v-dialog max-width="600" class="pa-0 ma-9" v-model="$store.state.store_products.forms.edit_product">
         <v-form lazy-validation v-model="valid" ref="form">
             <v-card :loading="loading" elevation="6"  max-width="600" class="ma-auto">
                 <v-card-title class="orange"  style="direction: rtl;color: white">
-                    <v-icon large color="white">mdi-cube-outline</v-icon>
-                    <span class="mr-2 f16">اضافة مادة</span>
+                    <v-icon large color="white">mdi-pencil</v-icon>
+                    <span class="mr-2 f16">تعديل مادة</span>
                     <v-spacer/>
-                    <v-btn icon @click="$store.state.store_products.forms.add_product=false">
+                    <v-btn icon @click="$store.state.store_products.forms.edit_product=false">
                         <v-icon large color="white">mdi-close</v-icon>
                     </v-btn>
                 </v-card-title>
@@ -47,11 +47,11 @@
                 </v-card-text>
                 <v-divider/>
                 <v-card-actions style="direction: rtl">
-                    <v-btn :loading="loading"  @click="add_item" color="primary" large>
+                    <v-btn :loading="loading" @click="edit_item" color="primary" large>
                         <v-icon>mdi-check</v-icon>
-                        <span class="f16 pa-2">حفظ</span>
+                        <span class="f16 pa-2">تعديل</span>
                     </v-btn>
-                    <v-btn outlined @click="$store.state.store_products.forms.add_product=false" color="primary" large>
+                    <v-btn outlined @click="$store.state.store_products.forms.edit_product=false" color="primary" large>
                         <v-icon>mdi-close</v-icon>
                         <span class="f16 pa-2">اللغاء</span>
                     </v-btn>
@@ -67,7 +67,7 @@
 
 <script>
     export default {
-        name: "AddProduct",
+        name: "EditProduct",
         data(){
             return{
                 valid:true,
@@ -79,14 +79,14 @@
                     item_priceDolar:'',
                     item_priceSale:'',
                     item_count:'',
-                    item_type:1,
+                    item_type:'',
                     item_store:'',
                     item_size:'',
+                    item_color:'',
                     item_barcode:'',
 
                 },
                 req:[v=>!!v || 'لايمكن ترك هذا الحقل فارغ'],
-                req_no:[v=>!!v&&Number(v)&&v<0 || 'يجب ادخال رقم'],
                 types:[
                     {label:'مخزنية',value:1},
                     {label:'خدمية',value:2},
@@ -94,28 +94,39 @@
             }
         },
         methods:{
-            async add_item()
+            async edit_item()
             {
-                if(this.$refs.form.validate())
-                {
-                    this.loading = true;
-                    await  this.$axios.post('api/add-item',this.item).then(res=>{
-                        this.$store.commit("GET_ITEMS");
-                        this.$fire({
-                            title: "نجح",
-                            text: res.data.msg,
-                            type: "success",
-                            timer: 2000
-                        });
+                this.loading = true;
+                await  this.$axios.post('api/edit-item',this.item).then(res=>{
+                    this.$store.commit("GET_ITEMS");
+                    this.$fire({
+                        title: "نجح",
+                        text: res.data.msg,
+                        type: "success",
+                        timer: 2000
+                    });
 
-                    }).catch(err=>{
-                        console.log(err)
-                    }).finally(fin=>{
-                        this.loading = false;
-                    })
+                }).catch(err=>{
+                    console.log(err)
+                }).finally(fin=>{
+                    this.loading = false;
+                })
+            }
+        },
+        computed:{
+            get_item:function () {
+                return this.$store.state.store_products.forms.edit_product;
+            }
+        },
+        watch:{
+            get_item:function (form) {
+                if(form)
+                {
+                    this.item = this.$store.state.store_products.target_item;
                 }
             }
-        }
+        },
+
     }
 </script>
 

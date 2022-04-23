@@ -1,29 +1,30 @@
 <template>
-    <v-dialog max-width="250" class="pa-0 ma-9" v-model="$store.state.users.forms.delete_user">
+    <v-dialog max-width="250" class="pa-0 ma-9" v-model="$store.state.store_products.forms.delete_product">
             <v-card :loading="loading" elevation="6"  max-width="800" class="ma-auto">
                 <v-card-title class="error"  style="direction: rtl;color: white">
                     <v-icon large color="white">mdi-delete</v-icon>
-                    <span class="mr-2 f16">حذف يوزر</span>
+                    <span class="mr-2 f16">حذف برج</span>
                     <v-spacer/>
-                    <v-btn icon @click="$store.state.users.forms.delete_user=false">
+                    <v-btn icon @click="$store.state.store_products.forms.delete_product=false">
                         <v-icon large color="white">mdi-close</v-icon>
                     </v-btn>
                 </v-card-title>
                 <v-divider />
                 <v-card-text>
                    <div class="f18 pa-4 ma-4 text-center">
-                       هل انت متأكد من حذف المشرف ؟
-                      <p class="f18b mt-4"> {{user.Fullname}}</p>
+                       هل انت متأكد من حذف
+                       {{item.item_name}}
+                       ؟
                    </div>
 
                 </v-card-text>
                 <v-divider/>
                 <v-card-actions style="direction: rtl">
-                    <v-btn :loading="loading" @click="delete_user"  color="error" large>
+                    <v-btn :loading="loading" @click="delete_item"  color="error" large>
                         <v-icon>mdi-delete</v-icon>
                         <span class="f16 pa-2">حذف</span>
                     </v-btn>
-                    <v-btn dark  @click="$store.state.users.forms.delete_user = false"  color="grey" large>
+                    <v-btn dark  @click="$store.state.store_products.forms.delete_product = false"  color="grey" large>
                         <v-icon>mdi-close</v-icon>
                         <span class="f16 pa-2">اللغاء</span>
                     </v-btn>
@@ -38,21 +39,26 @@
 
 <script>
     export default {
-        name: "DeleteUser",
+        name: "DeleteProduct",
         data(){
             return{
                 loading:false,
-                user:this.$store.state.users.target
+                item:[]
             }
         },
         methods:{
-            async delete_user(){
-
+            async delete_item(){
 
                 this.loading = true;
-                this.$axios.post('api/delete-user',{user_id:this.user.user_id}).then(res=>{
-                   this.$store.commit("GET_USERS");
-                   this.$store.state.users.forms.delete_user= false;
+                await  this.$axios.post('api/delete-item',this.item).then(res=>{
+                    this.$store.commit("GET_ITEMS");
+                    this.$fire({
+                        title: "نجح",
+                        text: res.data.msg,
+                        type: "success",
+                        timer: 2000
+                    });
+
                 }).catch(err=>{
                     console.log(err)
                 }).finally(fin=>{
@@ -61,14 +67,17 @@
             }
         },
         computed:{
-            get_user:function () {
-                return this.$store.state.users.target
-            },
+            get_item:function () {
+                return this.$store.state.store_products.forms.delete_product;
+            }
         },
         watch:{
-            get_user:function (new_user) {
-                this.user= new_user;
-            },
+            get_item:function (form) {
+                if(form)
+                {
+                    this.item = this.$store.state.store_products.target_item;
+                }
+            }
         },
 
     }

@@ -54,7 +54,7 @@
                             <v-divider/>
                             <v-card-actions style="direction: rtl">
                                 <v-btn :loading="loading" @click="add_customer"  color="primary" large>
-                                    <v-icon>mdi-key</v-icon>
+                                    <v-icon>mdi-check</v-icon>
                                     <span class="f16 pa-2">حفظ</span>
                                 </v-btn>
 

@@ -13,6 +13,9 @@ import Settings from "@/views/Settings";
 import Backups from "@/views/Backups";
 import StoreProducts from "@/views/StoreProducts";
 import NewProductBill from "@/components/Products/NewProductBill";
+import Foater from "@/components/Fatora/Foater";
+import FatoraDebtsUs from "@/components/Fatora/FatoraDebtsUs/FatoraDebtsUs";
+import FatoraDebtsThem from "@/components/Fatora/FatoraDebtsThem/FatoraDebtsThem";
 Vue.use(VueRouter)
 
 const routes = [
@@ -87,6 +90,22 @@ const routes = [
     name: 'Settings',
     component: Settings
   },
+  {
+    path: '/all-fatora',
+    name: 'Foater',
+    component: Foater
+  },
+  {
+    path: '/fatora-debts-to-us',
+    name: 'FatoraDebtsUs',
+    component: FatoraDebtsUs
+  },
+  {
+    path: '/fatora-debts-to-them',
+    name: 'FatoraDebtsThem',
+    component: FatoraDebtsThem
+  },
+
 
 ]
 
